@@ -16,8 +16,6 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class Main {
-    // Since it's the main class there's little harm in having it throw a login exception.
-    // Program will crash and then the user can fix their token or whatever.
     public static void main(String[] args) throws LoginException, IOException {
         // LOAD CONFIG
         // Config file should be placed in project root.
@@ -27,30 +25,34 @@ public class Main {
         String ownerID = configFile.get(1);
 
         // BUILD CLIENT
+        // Setting some client options.
         CommandClientBuilder client = new CommandClientBuilder();
-        client.setOwnerId(ownerID);        // loaded from config file
-        client.setPrefix("?");             // prefix used for all of our dank commands
-        client.setEmojis(                  // apparently JDA Utilities uses emojis for a bunch of stuff
-                "☕", // Coffee emoji
-                "\uD83D\uDE92", // Fire engine emoji
-                "\uD83D\uDD25" // Fire emoji
-        );
+        client.setOwnerId(ownerID);                         // loaded from configFile above.
+        client.setPrefix("?");                              // ? because we never know if it will work
+        client.setStatus(OnlineStatus.DO_NOT_DISTURB);      // Always busy...
+        client.setActivity(Activity.playing("with Java"));  // ...doin' sum Java.
+
         EventWaiter waiter = new EventWaiter(); // heaven knows what this is, but I need it.
+
+        /* JDA Utilities uses emoji reacts for success/warning/error messages. These are specified here.
+         * Success: Coffee/Hot beverage. Warning: Fire engine. Error: Fire
+         * Visibility may vary because intellij is really finicky with emoji. Probably something with encoding. */
+        client.setEmojis("☕", "\uD83D\uDE92", "\uD83D\uDD25");
 
         // ADD COMMANDS
         client.addCommands(
-                // Adding commands be like:
-                // new HeyThereCommand();
-                // new HelloThereCommand(waiter);
+                // Demo functions
+                // These have lots of comments to explain certain behaviours.
                 new Ping()
+
+                // Other functions
+                // ...there's nothing here yet.
         );
 
-        // LOGIN
+        // Go online!
         JDA bot = new JDABuilder(AccountType.BOT)
                 .setToken(token) // loaded from config file
-                .setStatus(OnlineStatus.DO_NOT_DISTURB)
                 .addEventListeners(waiter, client.build())
-                .setActivity(Activity.playing("with Java")) // playing with Java
                 .build(); // in we go!
     }
 }

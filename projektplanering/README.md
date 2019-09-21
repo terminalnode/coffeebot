@@ -44,10 +44,12 @@ Det finns botar som bara ligger och läser alla meddelanden som kommer flödande
 Detta mål är uppnått när boten kan svara på ett enkelt kommando. Kommandot i fråga kan vara helt eller delvis baserat på en existerande mall.
 
 **Status:** Klart 2019-09-19
+
 Det fanns ett utökningsbibliotek till JDA som heter JDA Utilities, i detta finns möjlighet att implementera kommandon på ett enkelt sätt. Boten har kan nu svara på kommandot `?ping`.
 
 ## Delmål 1: Boten ska kunna gå online
 Hitta och implementera ett javabibliotek för att skapa Discord-botar. Målet uppnått när botens status inte står som offline.
 
 **Status:** Klart 2019-09-19
+
 Biblioteket som använts heter JDA, vilket står för Java Discord API. Det är en inofficiell wrapper kring Discords egen API.

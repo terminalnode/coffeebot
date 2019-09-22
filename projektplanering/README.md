@@ -4,7 +4,7 @@
 Planeringen går ut på att utöka funktionaliteten stegvis med flera delmål tills de ultimata projektmålen (listade nedan) är implementerade.
 
 De ultimata målen för projektarbetet är:
-1. Att ha en bot som kan utföra vissa funktioner när den triggas antingen av en viss händelse eller innehåll i ett meddelande eller med ett kommando.
+1. ~~Att ha en bot som kan utföra vissa funktioner när den triggas antingen av en viss händelse eller innehåll i ett meddelande eller med ett kommando.~~
 2. Att vissa inställningar för boten ska sparas lokalt i JSON-format.
 3. Att vissa av inställningarna för boten ska vara serverspecifika.
 4. Att skapa en funktion där användare kan logga sina kaffedrickarvanor i en databas (rimligtvis en serverless SQL-databas som sqlite).
@@ -31,14 +31,16 @@ Användare ska kunna göra inställningar som sparas i JSON-format på disk och 
 
 **Status:** Ej implementerat
 
-## Delmål 3: Boten ska kunna svara på tilltal
+## ~~Delmål 3: Boten ska kunna svara på tilltal~~
 Kommandon är praktiskt, men passiva funktioner som triggas vid specifika tillfällen är också bra. En funktion i Discord är att man kan highlighta personer genom att skriva @PersonensNick, ett rimligt mål.
 
 Detta mål är uppnått när boten kan svara på meddelanden där den omnämnts med ett @mention. När det är klart är ultimat mål 1 avklarat.
 
-**Status:** Ej implementerat
+**Status:** Klart 2019-09-22
 
-## Delmål 2: Boten ska kunna ta ett enkelt kommando
+listeners/HelloListener.java kollar igenom alla meddelanden den får och svarar på de som innehåller "hi" eller "hello" samt ett mention av boten.
+
+## ~~Delmål 2: Boten ska kunna ta ett enkelt kommando~~
 Det finns botar som bara ligger och läser alla meddelanden som kommer flödande samt eventuellt reagerar på dessa meddelanden, men den typen av botar är svårare att hitta användningsområden för än de som exekverar funktioner på kommando. Boten bör kunna göra båda delar men kommandon är viktigast, därför bör något ramverk för att kunna upptäcka och reagera på kommandon implementeras.
 
 Detta mål är uppnått när boten kan svara på ett enkelt kommando. Kommandot i fråga kan vara helt eller delvis baserat på en existerande mall.
@@ -47,7 +49,7 @@ Detta mål är uppnått när boten kan svara på ett enkelt kommando. Kommandot 
 
 Det fanns ett utökningsbibliotek till JDA som heter JDA Utilities, i detta finns möjlighet att implementera kommandon på ett enkelt sätt. Boten har kan nu svara på kommandot `?ping`.
 
-## Delmål 1: Boten ska kunna gå online
+## ~~Delmål 1: Boten ska kunna gå online~~
 Hitta och implementera ett javabibliotek för att skapa Discord-botar. Målet uppnått när botens status inte står som offline.
 
 **Status:** Klart 2019-09-19

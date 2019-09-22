@@ -1,4 +1,5 @@
 package xyz.kazuthecat.coffeebot;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import xyz.kazuthecat.coffeebot.commands.*;
 
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
@@ -8,11 +9,13 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
+import xyz.kazuthecat.coffeebot.listeners.HelloListener;
 
 import javax.security.auth.login.LoginException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.EventListener;
 import java.util.List;
 
 public class Main {
@@ -32,7 +35,11 @@ public class Main {
         client.setStatus(OnlineStatus.DO_NOT_DISTURB);      // Always busy...
         client.setActivity(Activity.playing("with Java"));  // ...doin' sum Java.
 
-        EventWaiter waiter = new EventWaiter(); // heaven knows what this is, but I need it.
+        // EventWaiter is required for certain functions where we await some specific event.
+        // For example when we want to reply to a user or something.
+        EventWaiter eventWaiter = new EventWaiter();
+        ListenerAdapter helloListener = new HelloListener(eventWaiter);
+
 
         /* JDA Utilities uses emoji reacts for success/warning/error messages. These are specified here.
          * Success: Coffee/Hot beverage. Warning: Fire engine. Error: Fire
@@ -52,7 +59,10 @@ public class Main {
         // Go online!
         JDA bot = new JDABuilder(AccountType.BOT)
                 .setToken(token) // loaded from config file
-                .addEventListeners(waiter, client.build())
-                .build(); // in we go!
+                .addEventListeners(
+                        eventWaiter,
+                        helloListener,
+                        client.build()
+                ).build(); // in we go!
     }
 }

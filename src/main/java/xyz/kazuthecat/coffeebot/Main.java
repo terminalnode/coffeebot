@@ -9,13 +9,13 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
+import xyz.kazuthecat.coffeebot.internals.Settings;
 import xyz.kazuthecat.coffeebot.listeners.HelloListener;
 
 import javax.security.auth.login.LoginException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.EventListener;
 import java.util.List;
 
 public class Main {
@@ -34,6 +34,7 @@ public class Main {
         client.setPrefix("?");                              // ? because we never know if it will work
         client.setStatus(OnlineStatus.DO_NOT_DISTURB);      // Always busy...
         client.setActivity(Activity.playing("with Java"));  // ...doin' sum Java.
+        Settings settings = new Settings();                 // Holds all of our settings, obviously.
 
         // EventWaiter is required for certain functions where we await some specific event.
         // For example when we want to reply to a user or something.
@@ -50,10 +51,10 @@ public class Main {
         client.addCommands(
                 // Demo functions
                 // These have lots of comments to explain certain behaviours.
-                new Ping()
+                new PingCommand(settings),
 
                 // Other functions
-                // ...there's nothing here yet.
+                new SetCommand(settings)
         );
 
         // Go online!

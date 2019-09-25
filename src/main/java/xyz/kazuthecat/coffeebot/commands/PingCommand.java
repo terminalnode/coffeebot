@@ -2,7 +2,7 @@ package xyz.kazuthecat.coffeebot.commands;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import xyz.kazuthecat.coffeebot.internals.Settings;
+import xyz.kazuthecat.coffeebot.settings.Settings;
 
 /* This function is a sort of demo function where all the various parts of the command
  * class and important syntax stuff (mostly lambda functions) are explained for future reference. */
@@ -30,15 +30,14 @@ public class PingCommand extends Command {
      * that occur when the command is triggered. */
     @Override
     protected void execute(CommandEvent event) {
-        long time = System.currentTimeMillis();
-        // event.getChannel().sendMessage() returns a MessageAction object.
-        // MessageAction.queue() is what actually sends the message to Discord.
-        // response.editMessageFormat() also returns a MessageAction object.
+        // Retrieving setting for what the response message should be.
+        String pingResponse = settings.getSetting(event.getAuthor(), event.getGuild(), pingSetting);
 
-        event.getChannel().sendMessage("Pong!")
+        long time = System.currentTimeMillis();
+        event.getChannel().sendMessage(pingResponse)
                 .queue(
                         response -> response.editMessageFormat(
-                                "Pong! %d ms", (System.currentTimeMillis() - time)).queue()
+                                pingResponse + " %d ms", (System.currentTimeMillis() - time)).queue()
                 );
     }
 }

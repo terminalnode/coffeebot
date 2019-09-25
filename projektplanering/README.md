@@ -6,7 +6,7 @@ Planeringen går ut på att utöka funktionaliteten stegvis med flera delmål ti
 De ultimata målen för projektarbetet är:
 1. ~~Att ha en bot som kan utföra vissa funktioner när den triggas antingen av en viss händelse eller innehåll i ett meddelande eller med ett kommando.~~
 2. Att vissa inställningar för boten ska sparas lokalt i JSON-format.
-3. Att vissa av inställningarna för boten ska vara serverspecifika.
+3. ~~Att vissa av inställningarna för boten ska vara serverspecifika.~~
 4. Att skapa en funktion där användare kan logga sina kaffedrickarvanor i en databas (rimligtvis en serverless SQL-databas som sqlite).
 
 Utöver detta finns två bonusmål, som jag hoppas uppnå men som kanske inte är rimligt inom projektets tidsramar:
@@ -16,20 +16,27 @@ Utöver detta finns två bonusmål, som jag hoppas uppnå men som kanske inte ä
 # Delmål
 Mål 1 och 2 är skrivna i retrospekt då de redan var avklarade när planeringen påbörjades, de syftar till att beskriva mitt tillvägagångssätt när jag påbörjade projektet. Listan är i nedåtgående ordning med de äldsta målen längst ner.
 
-## Delmål 5: Botens svar på tilltal ska kunna modifieras
+## Delmål 5: Inställningar ska kunna göras genom Discord och sparas i JSON
+Användare ska kunna göra inställningar som sparas i JSON-format på disk och laddas när boten startar.
+
+Detta mål är uppnått när:
+* Diverse ändringar i inställningar kan göras under runtime.
+* Dessa ändringar består vid omstart och skrivs till disk i JSON-format så fort de utförs.
+
+**Status:** Ej implementerat
+
+## ~~Delmål 4: Botens svar på tilltal ska kunna modifieras~~
 En användare med admin-rättigheter ska kunna ställa in vad boten svarar med när den tilltalas genom ett @mention i servern där inställningen sker (funktionen från delmål 3).
 
 Detta mål är uppnått när:
-* Boten lämnar olika svar på tilltal i olika servrar.
-* Användare med adminbehörigheter kan ändra svaret under runtime.
-* Svaren ändras inte vid omstart. Ändringar som görs sparas som variabler i boten men ändras också omedelbart på disk.
+* Boten lämnar olika svar på tilltal i olika servrar och till olika användare.
+* Vanliga användare kan ändra beteende för sig själva.
+* Admins kan ändra beteende för hela servern.
+* Ägare kan ändra beteende för boten.
 
-**Status:** Ej implementerat
+**Status:** Klart 2019-09-25
 
-## Delmål 4: Inställningar ska kunna göras genom Discord och sparas i JSON
-Användare ska kunna göra inställningar som sparas i JSON-format på disk och laddas när boten startar. Administratörer ska ha rättighet att göra vissa ändringar som vanliga användare inte kan.
-
-**Status:** Ej implementerat
+Kommandona `?set`, `?setguild` respektive `?setowner` kan ändra inställningar för sig själva/servern/boten under förutsättning att de har rätt privilegier. Funktioner som fått settingsobjektet kan själva registrera inställningar + standardvärden för dessa vid uppstart. Texter kan fyllas i med diverse wildcards så som `{user}` för användaren, `{botname}` för boten eller `{content}` för meddelandets innehåll. Fler av dessa wildcards kan enkelt läggas till i framtiden.
 
 ## ~~Delmål 3: Boten ska kunna svara på tilltal~~
 Kommandon är praktiskt, men passiva funktioner som triggas vid specifika tillfällen är också bra. En funktion i Discord är att man kan highlighta personer genom att skriva @PersonensNick, ett rimligt mål.

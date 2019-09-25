@@ -9,6 +9,9 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
+import xyz.kazuthecat.coffeebot.commands.setcommands.SetCommand;
+import xyz.kazuthecat.coffeebot.commands.setcommands.SetGuildCommand;
+import xyz.kazuthecat.coffeebot.commands.setcommands.SetOwnerCommand;
 import xyz.kazuthecat.coffeebot.settings.Settings;
 import xyz.kazuthecat.coffeebot.listeners.HelloListener;
 
@@ -55,7 +58,8 @@ public class Main {
 
                 // Other functions
                 new SetCommand(settings),
-                new SetGuildCommand(settings)
+                new SetGuildCommand(settings),
+                new SetOwnerCommand(settings)
         );
 
         // Go online!

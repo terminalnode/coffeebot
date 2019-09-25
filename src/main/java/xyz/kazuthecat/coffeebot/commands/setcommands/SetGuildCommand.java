@@ -1,4 +1,4 @@
-package xyz.kazuthecat.coffeebot.commands;
+package xyz.kazuthecat.coffeebot.commands.setcommands;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
@@ -29,20 +29,25 @@ public class SetGuildCommand extends Command {
         String[] arglist = event.getArgs().split(" ");
         String settingName = arglist[0];
         String value = Arrays.stream(arglist).skip(1).collect(Collectors.joining(" "));
-        SettingEnum settingStatus = settings.putGuildSetting(event.getGuild(), settingName, value);
-
         String reply;
-        switch (settingStatus) {
-            case SUCCCESSFUL:
-                reply = " The server settings have been updated!"; break;
-            case DOESNOTEXIST:
-                reply = " There is no setting by the name of **" + settingName + "**, check your spelling or something idk."; break;
-            case FORBIDDEN:
-                reply = " That setting can not be changed at a server level."; break;
-            default:
-                // Includes SettingEnum.ERROR
-                reply = " Something went wrong. Not sure what. Not sure I care."; break;
+
+        if (value.isBlank()) {
+            reply = " You need to specify a setting *and* a value for that setting, DOLT!";
+        } else {
+            SettingEnum settingStatus = settings.putGuildSetting(event.getGuild(), settingName, value);
+            switch (settingStatus) {
+                case SUCCCESSFUL:
+                    reply = " The server settings have been updated!"; break;
+                case DOESNOTEXIST:
+                    reply = " There is no setting by the name of **" + settingName + "**, check your spelling or something idk."; break;
+                case FORBIDDEN:
+                    reply = " That setting can not be changed at a server level."; break;
+                default:
+                    // Includes SettingEnum.ERROR
+                    reply = " Something went wrong. Not sure what. Not sure I care."; break;
+            }
         }
+
         event.getChannel().sendMessage(event.getAuthor().getAsMention() + reply).queue();
     }
 }

@@ -32,6 +32,13 @@ public class Settings {
                         adminChangeable));
     }
 
+    /**
+     * Changes a given setting at user level.
+     * @param user The user for which the setting should be changed.
+     * @param identifier The name of the setting.
+     * @param value The new value for the setting.
+     * @return SettingEnum indicating whether the operation was successful.
+     */
     public SettingEnum putUserSetting(User user, String identifier, String value) {
         SingleSetting setting = settings.get(identifier);
         if (setting == null) {
@@ -40,6 +47,13 @@ public class Settings {
         return setting.putUserSetting(user, value);
     }
 
+    /**
+     * Changes a given setting at guild level.
+     * @param guild The guild for which the setting should be changed.
+     * @param identifier The name of the setting.
+     * @param value The new value for the setting.
+     * @return SettingEnum indicating whether the operation was successful.
+     */
     public SettingEnum putGuildSetting(Guild guild, String identifier, String value) {
         SingleSetting setting = settings.get(identifier);
         if (setting == null) {

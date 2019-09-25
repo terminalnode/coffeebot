@@ -12,16 +12,17 @@ public class SetOwnerCommand extends Command {
     private final Settings settings;
 
     public SetOwnerCommand(Settings settings) {
-            this.name = "setowner";
-            this.help = "changes the default value for a setting";
-            this.aliases = new String[]{"ownerset"};
-            this.arguments = "settingName value";
-            this.guildOnly = false;
-            this.ownerCommand = true;
+        this.name = "setowner";
+        this.help = "changes the default value for a setting";
+        this.aliases = new String[]{"ownerset"};
+        this.arguments = "settingName value";
+        this.guildOnly = false;
+        this.ownerCommand = true;
+        this.category = new Category("Settings");
 
-            // Set settings
-            this.settings = settings;
-        }
+        // Set settings
+        this.settings = settings;
+    }
 
     @Override
     protected void execute(CommandEvent event) {

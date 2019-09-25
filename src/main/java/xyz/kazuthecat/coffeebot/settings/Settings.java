@@ -3,7 +3,6 @@ package xyz.kazuthecat.coffeebot.settings;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.Event;
 
 import java.util.HashMap;
 import java.util.Map;

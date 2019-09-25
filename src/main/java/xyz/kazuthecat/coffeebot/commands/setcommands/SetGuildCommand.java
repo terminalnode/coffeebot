@@ -19,6 +19,7 @@ public class SetGuildCommand extends Command {
         this.userPermissions = new Permission[]{Permission.ADMINISTRATOR};
         this.arguments = "settingName value";
         this.guildOnly = true;
+        this.category = new Category("Settings");
 
         // Set settings
         this.settings = settings;

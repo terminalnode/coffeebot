@@ -16,6 +16,7 @@ public class SetCommand extends Command {
         this.help = "sets a setting for the current user";
         this.arguments = "settingName value";
         this.guildOnly = false;
+        this.category = new Category("Settings");
 
         // Set settings
         this.settings = settings;

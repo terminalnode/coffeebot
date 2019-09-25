@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.entities.User;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Settings {
     private final Map<String, SingleSetting> settings;
@@ -31,6 +32,21 @@ public class Settings {
                         adminChangeable));
     }
 
+    public SettingEnum putUserSetting(User user, String identifier, String value) {
+        SingleSetting setting = settings.get(identifier);
+        if (setting == null) {
+            return SettingEnum.DOESNOTEXIST;
+        }
+        return setting.putUserSetting(user, value);
+    }
+
+    /**
+     * Retrieve the most relevant setting for a certain user in a certain guild.
+     * @param user The user in question.
+     * @param guild The guild in question.
+     * @param identifier The name of the setting.
+     * @return User setting if available, guild setting if not, default setting if we have neither.
+     */
     public String getSetting(User user, Guild guild, String identifier) {
         SingleSetting setting = settings.get(identifier);
         if (setting == null) {
@@ -39,7 +55,22 @@ public class Settings {
         return setting.getSetting(user, guild);
     }
 
+    /**
+     * Get a set of all registered settings.
+     * @return The set of all currently listed settings.
+     */
     public Set<String> listAllSettings() {
         return settings.keySet();
+    }
+
+    /**
+     * Get a list of all registered settings of which substring is part of the identifier.
+     * @param substring The substring which all returned settings must contain.
+     * @return The set of all currently listed settings of which substring is part of the identifier.
+     */
+    public Set<String> listAllSettingsContaining(String substring) {
+        return settings.keySet().stream()
+                .filter(x -> x.contains(substring))
+                .collect(Collectors.toSet());
     }
 }

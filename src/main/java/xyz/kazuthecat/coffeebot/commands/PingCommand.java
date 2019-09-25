@@ -35,9 +35,9 @@ public class PingCommand extends Command {
 
         long time = System.currentTimeMillis();
         event.getChannel().sendMessage(pingResponse)
-                .queue(
-                        response -> response.editMessageFormat(
-                                pingResponse + " %d ms", (System.currentTimeMillis() - time)).queue()
-                );
+                .queue(response -> response.editMessageFormat(
+                        pingResponse + " %d ms",
+                        (System.currentTimeMillis() - time))
+                        .queue());
     }
 }

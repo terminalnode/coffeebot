@@ -42,7 +42,7 @@ public class Main {
         // EventWaiter is required for certain functions where we await some specific event.
         // For example when we want to reply to a user or something.
         EventWaiter eventWaiter = new EventWaiter();
-        ListenerAdapter helloListener = new HelloListener(eventWaiter);
+        ListenerAdapter helloListener = new HelloListener(eventWaiter, settings);
 
 
         /* JDA Utilities uses emoji reacts for success/warning/error messages. These are specified here.

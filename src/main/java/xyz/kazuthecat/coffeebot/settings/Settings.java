@@ -1,7 +1,9 @@
 package xyz.kazuthecat.coffeebot.settings;
 
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.Event;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -69,12 +71,18 @@ public class Settings {
      * @param identifier The name of the setting.
      * @return User setting if available, guild setting if not, default setting if we have neither.
      */
-    public String getSetting(User user, Guild guild, String identifier) {
+    public String getSetting(User user, Guild guild, String identifier, Message message) {
         SingleSetting setting = settings.get(identifier);
         if (setting == null) {
             return null;
         }
-        return setting.getSetting(user, guild);
+
+        String template = setting.getSetting(user, guild);
+        template = template.replaceAll("\\{user\\}", message.getAuthor().getAsMention());
+        template = template.replaceAll("\\{botname\\}", message.getJDA().getSelfUser().getName());
+        template = template.replaceAll("\\{content\\}", message.getContentRaw().strip());
+
+        return template;
     }
 
     /**

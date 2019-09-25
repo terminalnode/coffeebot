@@ -54,7 +54,8 @@ public class Main {
                 new PingCommand(settings),
 
                 // Other functions
-                new SetCommand(settings)
+                new SetCommand(settings),
+                new SetGuildCommand(settings)
         );
 
         // Go online!

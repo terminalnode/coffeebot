@@ -40,6 +40,14 @@ public class Settings {
         return setting.putUserSetting(user, value);
     }
 
+    public SettingEnum putGuildSetting(Guild guild, String identifier, String value) {
+        SingleSetting setting = settings.get(identifier);
+        if (setting == null) {
+            return SettingEnum.DOESNOTEXIST;
+        }
+        return setting.putGuildSetting(guild, value);
+    }
+
     /**
      * Retrieve the most relevant setting for a certain user in a certain guild.
      * @param user The user in question.

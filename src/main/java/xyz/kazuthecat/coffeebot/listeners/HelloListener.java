@@ -50,7 +50,7 @@ public class HelloListener extends ListenerAdapter {
         if (!botMentioned || !saidHello || bot.equals(user)) return;
 
         MessageChannel channel = event.getChannel();
-        String questionMsg = settings.getSetting(user, guild, questionSetting, message);
+        String questionMsg = settings.getSetting(questionSetting, message);
         channel.sendMessage(questionMsg).queue();
 
         // Note that the waiter is not blocking. You can't stage multiple waiters after one another.
@@ -64,7 +64,7 @@ public class HelloListener extends ListenerAdapter {
                 &&  !e.getMessage().equals(message), // Check that we're not looking at the same msg.
 
                 // Third parameter is some kind of event that extends consumer.
-                e -> channel.sendMessage(settings.getSetting(user, guild, responseSetting, e.getMessage())).queue(),
+                e -> channel.sendMessage(settings.getSetting(responseSetting, e.getMessage())).queue(),
 
                 // Fourth parameter is an optional time out followed by an optional event extending consumer.
                 20, TimeUnit.SECONDS,

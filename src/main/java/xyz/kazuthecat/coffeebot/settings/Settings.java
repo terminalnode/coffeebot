@@ -65,17 +65,18 @@ public class Settings {
 
     /**
      * Retrieve the most relevant setting for a certain user in a certain guild.
-     * @param user The user in question.
-     * @param guild The guild in question.
      * @param identifier The name of the setting.
+     * @param message The message from which to fetch author and so on.
      * @return User setting if available, guild setting if not, default setting if we have neither.
      */
-    public String getSetting(User user, Guild guild, String identifier, Message message) {
+    public String getSetting(String identifier, Message message) {
         SingleSetting setting = settings.get(identifier);
         if (setting == null) {
             return null;
         }
 
+        Guild guild = message.getGuild();
+        User user = message.getAuthor();
         String template = setting.getSetting(user, guild);
         template = template.replaceAll("\\{user\\}", message.getAuthor().getAsMention());
         template = template.replaceAll("\\{botname\\}", message.getJDA().getSelfUser().getName());

@@ -29,7 +29,6 @@ public class SetCommand extends Command {
         String value = Arrays.stream(arglist).skip(1).collect(Collectors.joining(" "));
         String reply;
 
-
         if (value.isBlank()) {
             reply = " You need to specify a setting *and* a value for that setting, DOLT!";
         } else {

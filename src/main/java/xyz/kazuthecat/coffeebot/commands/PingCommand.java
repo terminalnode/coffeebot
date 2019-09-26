@@ -31,7 +31,7 @@ public class PingCommand extends Command {
     @Override
     protected void execute(CommandEvent event) {
         // Retrieving setting for what the response message should be.
-        String pingResponse = settings.getSetting(event.getAuthor(), event.getGuild(), pingSetting, event.getMessage());
+        String pingResponse = settings.getSetting(pingSetting, event.getMessage());
 
         long time = System.currentTimeMillis();
         event.getChannel().sendMessage(pingResponse)

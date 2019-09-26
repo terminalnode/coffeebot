@@ -1,105 +1,149 @@
 package xyz.kazuthecat.coffeebot.settings;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+import java.lang.reflect.Type;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Settings {
-    private final Map<String, SingleSetting> settings;
+    private final Gson gson;
+    private final String settingsFile;
+    private final Map<String, String> defaultSettings;
+    private Map<String, CustomSettings> customSettings;
 
     public Settings() {
-        settings = new HashMap<>();
+        gson = new Gson();
+        settingsFile = "botsettings.json";
+        defaultSettings = new HashMap<>();
+
+        customSettings = null;
+        try {
+            Path settingsPath = Paths.get(settingsFile);
+            String json = Files.readString(settingsPath);
+            Type settingsMapType = new TypeToken<HashMap<String, CustomSettings>>() {}.getType();
+            customSettings = gson.fromJson(json, settingsMapType);
+        } catch (Exception e) {
+            System.out.println("Something went wrong when trying to load json.");
+        }
+        if (customSettings == null) customSettings = new HashMap<>();
     }
 
-    /**
-     * Adds a new setting with it's default values.
-     * @param identifier The name of the setting. Should be of the form commandname.settingname to avoid collisions.
-     * @param defaultValue The default value of the setting.
-     * @param userChangeable Boolean indicating whether users may change this setting for themselves.
-     * @param adminChangeable Boolean indicating whether admins may change this setting for the server.
-     */
     public void setDefaults(String identifier, String defaultValue, boolean userChangeable, boolean adminChangeable) {
-        settings.put(
-                identifier,
-                new SingleSetting(
-                        identifier,
-                        defaultValue,
-                        userChangeable,
-                        adminChangeable));
+        defaultSettings.put(identifier, defaultValue);
+
+        CustomSettings setting = customSettings.get(identifier);
+        if (setting == null) {
+            customSettings.put(identifier, new CustomSettings(identifier, userChangeable, adminChangeable, null));
+        } else {
+            setting.setAdminChangeable(adminChangeable);
+            setting.setUserChangeable(userChangeable);
+        }
     }
 
-    /**
-     * Changes a given setting at user level.
-     * @param user The user for which the setting should be changed.
-     * @param identifier The name of the setting.
-     * @param value The new value for the setting.
-     * @return SettingEnum indicating whether the operation was successful.
-     */
+    private void writeJSON() {
+        // Pretty print json, for debugging
+        System.out.println(new GsonBuilder().setPrettyPrinting().create().toJson(customSettings));
+
+        String json = gson.toJson(customSettings);
+        try {
+            PrintStream out = new PrintStream(new FileOutputStream(settingsFile));
+            out.print(json);
+            out.flush();
+        } catch (Exception e) {
+            System.out.println("Error: Failed to write " + settingsFile + " to disk:");
+            System.out.println(e.toString());
+        }
+    }
+
+    public SettingEnum putBotSetting(String identifier, String value) {
+        if (defaultSettings.containsKey(identifier)) {
+            try {
+                customSettings
+                        .get(identifier)
+                        .changeDefault(value);
+                writeJSON();
+                return SettingEnum.SUCCCESSFUL;
+            } catch (Exception e) {
+                System.out.println("Failed to change bot setting +" + identifier + ":");
+                System.out.println(e.toString());
+                return SettingEnum.ERROR;
+            }
+        }
+        return SettingEnum.DOESNOTEXIST;
+
+    }
+
     public SettingEnum putUserSetting(User user, String identifier, String value) {
-        SingleSetting setting = settings.get(identifier);
-        if (setting == null) {
+        if (defaultSettings.containsKey(identifier)) {
+            SettingEnum result = customSettings
+                    .get(identifier)
+                    .putUserSetting(user, value);
+            writeJSON();
+            return result;
+        } else {
             return SettingEnum.DOESNOTEXIST;
         }
-        return setting.putUserSetting(user, value);
     }
 
-    /**
-     * Changes a given setting at guild level.
-     * @param guild The guild for which the setting should be changed.
-     * @param identifier The name of the setting.
-     * @param value The new value for the setting.
-     * @return SettingEnum indicating whether the operation was successful.
-     */
     public SettingEnum putGuildSetting(Guild guild, String identifier, String value) {
-        SingleSetting setting = settings.get(identifier);
-        if (setting == null) {
+        if (defaultSettings.containsKey(identifier)) {
+            SettingEnum result = customSettings
+                    .get(identifier)
+                    .putGuildSetting(guild, value);
+            writeJSON();
+            return result;
+        } else {
             return SettingEnum.DOESNOTEXIST;
         }
-        return setting.putGuildSetting(guild, value);
     }
 
-    /**
-     * Retrieve the most relevant setting for a certain user in a certain guild.
-     * @param identifier The name of the setting.
-     * @param message The message from which to fetch author and so on.
-     * @return User setting if available, guild setting if not, default setting if we have neither.
-     */
     public String getSetting(String identifier, Message message) {
-        SingleSetting setting = settings.get(identifier);
-        if (setting == null) {
+        if (!defaultSettings.containsKey(identifier)) {
             return null;
         }
 
+        CustomSettings setting = customSettings.get(identifier);
         Guild guild = message.getGuild();
         User user = message.getAuthor();
-        String template = setting.getSetting(user, guild);
-        template = template.replaceAll("\\{user\\}", message.getAuthor().getAsMention());
-        template = template.replaceAll("\\{botname\\}", message.getJDA().getSelfUser().getName());
-        template = template.replaceAll("\\{content\\}", message.getContentRaw().strip());
+        String result;
 
-        return template;
+        if (setting == null) {
+            result = null;
+        } else {
+            result = setting.getSetting(user, guild);
+        }
+
+        if (result == null) {
+            return standardReplacements(defaultSettings.get(identifier), message);
+        } else if (result.contains("{")) {
+            return standardReplacements(result, message);
+        } else {
+            return result;
+        }
     }
 
-    /**
-     * Get a set of all registered settings.
-     * @return The set of all currently listed settings.
-     */
-    public Set<String> listAllSettings() {
-        return settings.keySet();
+    private String standardReplacements(String input, Message message) {
+        return input
+                .replaceAll("\\{user\\}", message.getAuthor().getAsMention())
+                .replaceAll("\\{botname\\}", message.getJDA().getSelfUser().getName())
+                .replaceAll("\\{content\\}", message.getContentRaw().strip());
     }
 
-    /**
-     * Get a list of all registered settings of which substring is part of the identifier.
-     * @param substring The substring which all returned settings must contain.
-     * @return The set of all currently listed settings of which substring is part of the identifier.
-     */
-    public Set<String> listAllSettingsContaining(String substring) {
-        return settings.keySet().stream()
+    public Set<String> allSettingsContaining(String substring) {
+        return defaultSettings.keySet().stream()
                 .filter(x -> x.contains(substring))
                 .collect(Collectors.toSet());
     }

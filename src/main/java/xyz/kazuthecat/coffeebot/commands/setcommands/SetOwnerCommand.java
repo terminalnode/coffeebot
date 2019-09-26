@@ -14,7 +14,7 @@ public class SetOwnerCommand extends Command {
     public SetOwnerCommand(Settings settings) {
         this.name = "setowner";
         this.help = "changes the default value for a setting";
-        this.aliases = new String[]{"ownerset"};
+        this.aliases = new String[]{"ownerset", "setbot", "botset"};
         this.arguments = "settingName value";
         this.guildOnly = false;
         this.ownerCommand = true;
@@ -34,7 +34,7 @@ public class SetOwnerCommand extends Command {
         if (value.isBlank()) {
             reply = " You need to specify a setting *and* a value for that setting, DOLT!";
         } else {
-            SettingEnum settingStatus = settings.putGuildSetting(event.getGuild(), settingName, value);
+            SettingEnum settingStatus = settings.putBotSetting(settingName, value);
             switch (settingStatus) {
                 case SUCCCESSFUL:
                     reply = " The bot settings have been updated!"; break;

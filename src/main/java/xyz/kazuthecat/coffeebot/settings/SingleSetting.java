@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * A class which holds a specific setting, handles changing of that
+ * A class which holds a specific setting, handles changes to that
  * setting and so on. A single function can have many settings and
  * thus many of these objects.
  */

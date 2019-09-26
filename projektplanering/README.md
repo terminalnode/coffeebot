@@ -5,7 +5,7 @@ Planeringen går ut på att utöka funktionaliteten stegvis med flera delmål ti
 
 De ultimata målen för projektarbetet är:
 1. ~~Att ha en bot som kan utföra vissa funktioner när den triggas antingen av en viss händelse eller innehåll i ett meddelande eller med ett kommando.~~
-2. Att vissa inställningar för boten ska sparas lokalt i JSON-format.
+2. ~~Att vissa inställningar för boten ska sparas lokalt i JSON-format.~~
 3. ~~Att vissa av inställningarna för boten ska vara serverspecifika.~~
 4. Att skapa en funktion där användare kan logga sina kaffedrickarvanor i en databas (rimligtvis en serverless SQL-databas som sqlite).
 
@@ -16,14 +16,45 @@ Utöver detta finns två bonusmål, som jag hoppas uppnå men som kanske inte ä
 # Delmål
 Mål 1 och 2 är skrivna i retrospekt då de redan var avklarade när planeringen påbörjades, de syftar till att beskriva mitt tillvägagångssätt när jag påbörjade projektet. Listan är i nedåtgående ordning med de äldsta målen längst ner.
 
-## Delmål 5: Inställningar ska kunna göras genom Discord och sparas i JSON
+## Delmål 9: Registrera kaffekopparna i en databas
+I bästa fall kör vi direkt på AWS för databasen, men SQLite är acceptabelt i det här stadiet. Användaren behöver inte kunna utläsa informationen som sparas eller registrera den.
+
+Detta mål är uppnått när:
+* Outputen från ?coffeelog sparats i en databas.
+
+**Status:** Ej implementerat
+
+## Delmål 8: Implementera ett kommando för att spara kaffekoppar
+När en användare använder detta kommando ska de kunna registera en drucken kaffe. I första steget behöver inte denna data sparas någonstans, bara noteras och parseas.
+
+Detta mål är uppnått när:
+* ?coffeelog eller liknande kan användas för att registrera en kopp kaffe.
+* Användaren ska optionally kunna specificera ett antal detaljer om sin kopp kaffe.
+
+**Status:** Ej implementerat
+
+## Delmål 7: Inställningar ska kunna nollas genom Discord
+Detta mål är uppnått när:
+* ?unset, ?unsetguild, och ?unsetowner är implementerade och återställer standardvärdet för en inställning.
+* Ett återställt värde hålls återställt vid omstart av boten.
+
+**Status:** Ej implementerat
+
+## Delmål 6: Tillgängliga inställningar ska kunna sökas efter genom Discord
+Det finns redan en funktion för att filtrera alla inställningar beroende på om de innehåller en given substräng. Gör ett kommando av det här.
+
+**Status:** Ej implementerat
+
+## ~~Delmål 5: Inställningar ska kunna göras genom Discord och sparas i JSON~~
 Användare ska kunna göra inställningar som sparas i JSON-format på disk och laddas när boten startar.
 
 Detta mål är uppnått när:
 * Diverse ändringar i inställningar kan göras under runtime.
 * Dessa ändringar består vid omstart och skrivs till disk i JSON-format så fort de utförs.
 
-**Status:** Ej implementerat
+**Status:** 2019-09-26
+
+En del omorganisering i Settings.java och CustomSettings.java var nödvändigt för att fungera i ett JSON-format. Googles bibliotek GSON används för att serialisera och deserialisera inställningar.
 
 ## ~~Delmål 4: Botens svar på tilltal ska kunna modifieras~~
 En användare med admin-rättigheter ska kunna ställa in vad boten svarar med när den tilltalas genom ett @mention i servern där inställningen sker (funktionen från delmål 3).

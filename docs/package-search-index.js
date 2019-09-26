@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"xyz.kazuthecat.coffeebot"},{"l":"xyz.kazuthecat.coffeebot.commands"},{"l":"xyz.kazuthecat.coffeebot.commands.setcommands"},{"l":"xyz.kazuthecat.coffeebot.listeners"},{"l":"xyz.kazuthecat.coffeebot.settings"}]

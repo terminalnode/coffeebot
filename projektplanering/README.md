@@ -40,10 +40,12 @@ Detta mål är uppnått när:
 
 **Status:** Ej implementerat
 
-## Delmål 6: Tillgängliga inställningar ska kunna sökas efter genom Discord
+## ~~Delmål 6: Tillgängliga inställningar ska kunna sökas efter genom Discord~~
 Det finns redan en funktion för att filtrera alla inställningar beroende på om de innehåller en given substräng. Gör ett kommando av det här.
 
-**Status:** Ej implementerat
+**Status:** 2019-09-27
+
+Kommandot ?setlist följt av en eller flera söktermer listar alla tillgängliga inställningar som innehåller söksträngen.
 
 ## ~~Delmål 5: Inställningar ska kunna göras genom Discord och sparas i JSON~~
 Användare ska kunna göra inställningar som sparas i JSON-format på disk och laddas när boten startar.

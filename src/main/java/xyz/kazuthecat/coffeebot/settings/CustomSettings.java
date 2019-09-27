@@ -28,6 +28,7 @@ public class CustomSettings {
     void setAdminChangeable(boolean setting) { adminChangeable = setting; }
     public boolean isUserChangeable() { return userChangeable; }
     public boolean isAdminChangeable() { return adminChangeable; }
+    public String getName() { return name; }
 
     String getSetting(User user, Guild guild) {
         String userSetting = userValues.get(user.getIdLong());

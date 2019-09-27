@@ -142,9 +142,10 @@ public class Settings {
                 .replaceAll("\\{content\\}", message.getContentRaw().strip());
     }
 
-    public Set<String> allSettingsContaining(String substring) {
-        return defaultSettings.keySet().stream()
-                .filter(x -> x.contains(substring))
+    public Set<CustomSettings> allSettingsContaining(String substring) {
+        return customSettings.entrySet().stream()
+                .filter(x -> x.getKey().contains(substring))
+                .map(Map.Entry::getValue)
                 .collect(Collectors.toSet());
     }
 }

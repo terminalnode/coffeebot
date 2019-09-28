@@ -63,6 +63,21 @@ public class CustomSettings {
         }
     }
 
+    SettingEnum removeUserSetting(User user) {
+        try {
+            if (userValues.containsKey(user.getIdLong())) {
+                userValues.remove(user.getIdLong());
+                return SettingEnum.SUCCCESSFUL;
+            } else {
+                return SettingEnum.NOTSET;
+            }
+        } catch (Exception e) {
+            System.out.println("Error: Could not remove setting " + name + " for user " + user.getName());
+            System.out.println(e.toString());
+            return SettingEnum.ERROR;
+        }
+    }
+
     SettingEnum putGuildSetting(Guild guild, String value) {
         if (adminChangeable) {
             try {

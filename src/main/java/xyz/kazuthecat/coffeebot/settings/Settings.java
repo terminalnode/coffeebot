@@ -55,7 +55,7 @@ public class Settings {
 
     private void writeJSON() {
         // Pretty print json, for debugging
-        System.out.println(new GsonBuilder().setPrettyPrinting().create().toJson(customSettings));
+        // System.out.println(new GsonBuilder().setPrettyPrinting().create().toJson(customSettings));
 
         String json = gson.toJson(customSettings);
         try {
@@ -96,6 +96,19 @@ public class Settings {
         } else {
             return SettingEnum.DOESNOTEXIST;
         }
+    }
+
+    public SettingEnum removeUserSetting(User user, String identifier) {
+        if (defaultSettings.containsKey(identifier)) {
+            SettingEnum result = customSettings
+                    .get(identifier)
+                    .removeUserSetting(user);
+            writeJSON();
+            return result;
+        } else {
+            return SettingEnum.DOESNOTEXIST;
+        }
+
     }
 
     public SettingEnum putGuildSetting(Guild guild, String identifier, String value) {

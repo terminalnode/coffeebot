@@ -1,6 +1,9 @@
 package xyz.kazuthecat.coffeebot;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import xyz.kazuthecat.coffeebot.settings.Settings;
+import xyz.kazuthecat.coffeebot.listeners.*;
 import xyz.kazuthecat.coffeebot.commands.*;
+import xyz.kazuthecat.coffeebot.commands.setcommands.*;
 
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
@@ -9,12 +12,6 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
-import xyz.kazuthecat.coffeebot.commands.setcommands.SetCommand;
-import xyz.kazuthecat.coffeebot.commands.setcommands.SetGuildCommand;
-import xyz.kazuthecat.coffeebot.commands.setcommands.SetListCommand;
-import xyz.kazuthecat.coffeebot.commands.setcommands.SetOwnerCommand;
-import xyz.kazuthecat.coffeebot.settings.Settings;
-import xyz.kazuthecat.coffeebot.listeners.HelloListener;
 
 import javax.security.auth.login.LoginException;
 import java.io.IOException;
@@ -57,11 +54,17 @@ public class Main {
                 // These have lots of comments to explain certain behaviours.
                 new PingCommand(settings),
 
-                // Other functions
+                // Settings functions
                 new SetCommand(settings),
+                new UnSetCommand(settings),
                 new SetGuildCommand(settings),
+                new UnSetGuildCommand(settings),
                 new SetOwnerCommand(settings),
+                new UnSetOwnerCommand(settings),
                 new SetListCommand(settings)
+
+                // Other commands
+                // There's nothing here yet... :(
         );
 
         // Go online!

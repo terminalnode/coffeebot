@@ -2,6 +2,7 @@ package xyz.kazuthecat.coffeebot.commands.setcommands;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import xyz.kazuthecat.coffeebot.settings.SettingEnum;
 import xyz.kazuthecat.coffeebot.settings.Settings;
 
 public class UnSetCommand extends Command {
@@ -20,6 +21,27 @@ public class UnSetCommand extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        event.reply(this.name + " is WIP");
+        String[] arglist = event.getArgs().split(" ");
+        String settingName = arglist[0];
+        String reply;
+
+        if (settingName.isBlank()) {
+            reply = " You need to specify a setting *and* a value for that setting, DOLT!";
+        } else {
+            SettingEnum settingStatus = settings.removeUserSetting(event.getAuthor(), settingName);
+            switch (settingStatus) {
+                case SUCCCESSFUL:
+                    reply = " The setting has been reset!"; break;
+                case DOESNOTEXIST:
+                    reply = " There is no setting by the name of **" + settingName + "**, check your spelling or something idk."; break;
+                case NOTSET:
+                    reply = " That setting isn't set for you, so I guess you can consider it unset?"; break;
+                default:
+                    // Includes SettingEnum.ERROR
+                    reply = " Something went wrong. Not sure what. Not sure I care."; break;
+            }
+        }
+
+        event.getChannel().sendMessage(event.getAuthor().getAsMention() + reply).queue();
     }
 }

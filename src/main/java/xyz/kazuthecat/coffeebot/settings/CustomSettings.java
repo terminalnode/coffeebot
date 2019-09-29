@@ -44,8 +44,17 @@ public class CustomSettings {
         return alteredDefault; // May be null!
     }
 
-    void changeDefault(String value) {
+    void setDefault(String value) {
         alteredDefault = value;
+    }
+
+    SettingEnum unsetDefault() {
+        if (alteredDefault != null) {
+            alteredDefault = null;
+            return SettingEnum.SUCCCESSFUL;
+        } else {
+            return SettingEnum.NOTSET;
+        }
     }
 
     SettingEnum putUserSetting(User user, String value) {
@@ -78,22 +87,6 @@ public class CustomSettings {
         }
     }
 
-    SettingEnum removeGuildSetting(Guild guild) {
-        System.out.println("got here");
-        try {
-            if (guildValues.containsKey((guild.getIdLong()))) {
-                guildValues.remove(guild.getIdLong());
-                return SettingEnum.SUCCCESSFUL;
-            } else {
-                return SettingEnum.NOTSET;
-            }
-        } catch (Exception e) {
-            System.out.println("Error: Could not remove setting " + name + " for user " + guild.getName());
-            System.out.println(e.toString());
-            return SettingEnum.ERROR;
-        }
-    }
-
     SettingEnum putGuildSetting(Guild guild, String value) {
         if (adminChangeable) {
             try {
@@ -106,6 +99,21 @@ public class CustomSettings {
             }
         } else {
             return SettingEnum.FORBIDDEN;
+        }
+    }
+
+    SettingEnum removeGuildSetting(Guild guild) {
+        try {
+            if (guildValues.containsKey((guild.getIdLong()))) {
+                guildValues.remove(guild.getIdLong());
+                return SettingEnum.SUCCCESSFUL;
+            } else {
+                return SettingEnum.NOTSET;
+            }
+        } catch (Exception e) {
+            System.out.println("Error: Could not remove setting " + name + " for user " + guild.getName());
+            System.out.println(e.toString());
+            return SettingEnum.ERROR;
         }
     }
 }

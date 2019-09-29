@@ -73,7 +73,7 @@ public class Settings {
             try {
                 customSettings
                         .get(identifier)
-                        .changeDefault(value);
+                        .setDefault(value);
                 writeJSON();
                 return SettingEnum.SUCCCESSFUL;
             } catch (Exception e) {
@@ -83,7 +83,15 @@ public class Settings {
             }
         }
         return SettingEnum.DOESNOTEXIST;
+    }
 
+    public SettingEnum removeBotSetting(String identifier) {
+        if (defaultSettings.containsKey(identifier)) {
+            return customSettings
+                    .get(identifier)
+                    .unsetDefault();
+        }
+        return SettingEnum.DOESNOTEXIST;
     }
 
     public SettingEnum putUserSetting(User user, String identifier, String value) {

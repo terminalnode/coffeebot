@@ -21,8 +21,7 @@ public class UnSetCommand extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        String[] arglist = event.getArgs().split(" ");
-        String settingName = arglist[0];
+        String settingName = event.getArgs().split(" ")[0];
         String reply;
 
         if (settingName.isBlank()) {

@@ -108,7 +108,6 @@ public class Settings {
         } else {
             return SettingEnum.DOESNOTEXIST;
         }
-
     }
 
     public SettingEnum putGuildSetting(Guild guild, String identifier, String value) {
@@ -116,6 +115,18 @@ public class Settings {
             SettingEnum result = customSettings
                     .get(identifier)
                     .putGuildSetting(guild, value);
+            writeJSON();
+            return result;
+        } else {
+            return SettingEnum.DOESNOTEXIST;
+        }
+    }
+
+    public SettingEnum removeGuildSetting(Guild guild, String identifier) {
+        if (defaultSettings.containsKey(identifier)) {
+            SettingEnum result = customSettings
+                    .get(identifier)
+                    .removeGuildSetting(guild);
             writeJSON();
             return result;
         } else {

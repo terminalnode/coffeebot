@@ -38,12 +38,14 @@ Detta mål är uppnått när:
 * ?unset, ?unsetguild, och ?unsetowner är implementerade och återställer standardvärdet för en inställning.
 * Ett återställt värde hålls återställt vid omstart av boten.
 
-**Status:** Ej implementerat
+**Status:** Klart 2019-09-30 eller 2019-09-29 typ.
+
+Kommandona ?unset ?unsetguild och ?unsetbot följt av ett inställningsnamn kan användas för att nolla inställningar.
 
 ## ~~Delmål 6: Tillgängliga inställningar ska kunna sökas efter genom Discord~~
 Det finns redan en funktion för att filtrera alla inställningar beroende på om de innehåller en given substräng. Gör ett kommando av det här.
 
-**Status:** 2019-09-27
+**Status:** Klart 2019-09-27
 
 Kommandot ?setlist följt av en eller flera söktermer listar alla tillgängliga inställningar som innehåller söksträngen.
 
@@ -54,7 +56,7 @@ Detta mål är uppnått när:
 * Diverse ändringar i inställningar kan göras under runtime.
 * Dessa ändringar består vid omstart och skrivs till disk i JSON-format så fort de utförs.
 
-**Status:** 2019-09-26
+**Status:** Klart 2019-09-26
 
 En del omorganisering i Settings.java och CustomSettings.java var nödvändigt för att fungera i ett JSON-format. Googles bibliotek GSON används för att serialisera och deserialisera inställningar.
 

@@ -32,7 +32,7 @@ public class UnSetOwnerCommand extends Command {
         } else {
             SettingEnum settingStatus = settings.removeBotSetting(settingName);
             switch (settingStatus) {
-                case SUCCCESSFUL:
+                case SUCCESSFUL:
                     reply = " The setting has been reset!"; break;
                 case DOESNOTEXIST:
                     reply = " There is no setting by the name of **" + settingName + "**, check your spelling or something idk."; break;

@@ -3,8 +3,6 @@ package xyz.kazuthecat.coffeebot.commands.setcommands;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.ChannelType;
-import net.dv8tion.jda.api.entities.Guild;
 import xyz.kazuthecat.coffeebot.settings.SettingEnum;
 import xyz.kazuthecat.coffeebot.settings.Settings;
 
@@ -34,7 +32,7 @@ public class UnSetGuildCommand extends Command {
         } else {
             SettingEnum settingStatus = settings.removeGuildSetting(event.getGuild(), settingName);
             switch (settingStatus) {
-                case SUCCCESSFUL:
+                case SUCCESSFUL:
                     reply = " The setting has been reset!"; break;
                 case DOESNOTEXIST:
                     reply = " There is no setting by the name of **" + settingName + "**, check your spelling or something idk."; break;

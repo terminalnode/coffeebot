@@ -29,7 +29,7 @@ public class UnSetCommand extends Command {
         } else {
             SettingEnum settingStatus = settings.removeUserSetting(event.getAuthor(), settingName);
             switch (settingStatus) {
-                case SUCCCESSFUL:
+                case SUCCESSFUL:
                     reply = " The setting has been reset!"; break;
                 case DOESNOTEXIST:
                     reply = " There is no setting by the name of **" + settingName + "**, check your spelling or something idk."; break;

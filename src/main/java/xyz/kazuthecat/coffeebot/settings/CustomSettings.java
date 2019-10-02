@@ -129,7 +129,7 @@ public class CustomSettings {
 
     /**
      * Method for customizing the setting for a given guild.
-     * @param guild The guild thas wishes to customise the setting.
+     * @param guild The guild that wishes to customise the setting.
      * @param value The value which the setting will have for this server/guild.
      * @return A SettingEnum indicating whether the operation was successful.
      */

@@ -223,14 +223,12 @@ public class Settings {
         }
 
         CustomSettings setting = customSettings.get(identifier);
-        Guild guild = message.getGuild();
-        User user = message.getAuthor();
         String result;
 
         if (setting == null) {
             result = null;
         } else {
-            result = setting.getSetting(user, guild);
+            result = setting.getSetting(message);
         }
 
         if (result == null) {

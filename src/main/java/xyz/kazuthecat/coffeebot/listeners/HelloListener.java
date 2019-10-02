@@ -42,7 +42,6 @@ public class HelloListener extends ListenerAdapter {
         String content = message.getContentRaw().toLowerCase();
         User bot = message.getJDA().getSelfUser();
         User user = event.getAuthor();
-        Guild guild = event.getGuild();
 
         // If "hi" or "hello" wasn't in the message, or if the bot wasn't mentioned: abort.
         boolean botMentioned = message.getMentionedUsers().contains(bot);

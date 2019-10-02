@@ -1,6 +1,7 @@
 package xyz.kazuthecat.coffeebot.settings;
 
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 
 import java.util.HashMap;
@@ -45,19 +46,20 @@ public class CustomSettings {
     /**
      * Retrieves the most relevant setting for a given user/guild combination, if the setting is set for user/admin
      * this setting is returned. If it is not set the altered default (which may be null) is returned.
-     * @param user The User object which requested the setting.
-     * @param guild the Guild object which requested the setting.
+     * @param message The message context for which the setting will be retrieved.
      * @return The string value for the setting (may be null).
      */
-    String getSetting(User user, Guild guild) {
-        String userSetting = userValues.get(user.getIdLong());
-        if (userSetting != null && userChangeable) {
-            return userSetting;
+    String getSetting(Message message) {
+        if (userChangeable) {
+            String userSetting = userValues.get(message.getAuthor().getIdLong());
+            if (userSetting != null)
+                return userSetting;
         }
 
-        String guildSetting = guildValues.get(guild.getIdLong());
-        if (guildSetting != null && adminChangeable) {
-            return guildSetting;
+        if (adminChangeable && message.isFromGuild()) {
+            String guildSetting = guildValues.get(message.getGuild().getIdLong());
+            if (guildSetting != null)
+                return guildSetting;
         }
 
         return alteredDefault; // May be null!

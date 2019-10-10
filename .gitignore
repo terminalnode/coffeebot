@@ -1,6 +1,7 @@
 # Bot specific stuff
 # Settings file with bot token and owner id
 config
+predefinedInputs
 botsettings.json
 
 ## Gradle stuff

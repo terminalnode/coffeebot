@@ -32,7 +32,7 @@ public class SetCommand extends Command {
         if (value.isBlank()) {
             reply = " You need to specify a setting *and* a value for that setting, DOLT!";
         } else {
-            SettingEnum settingStatus = settings.putUserSetting(event.getAuthor(), settingName, value);
+            SettingEnum settingStatus = settings.putSetting(event.getAuthor(), settingName, value);
             switch (settingStatus) {
                 case SUCCESSFUL:
                     reply = " Your settings have been updated!"; break;

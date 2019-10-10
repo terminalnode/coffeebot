@@ -25,12 +25,11 @@ public class UnSetOwnerCommand extends Command {
     protected void execute(CommandEvent event) {
         String settingName = event.getArgs().split(" ")[0];
         String reply;
-        System.out.println("got here!");
 
         if (settingName.isBlank()) {
             reply = " You need to specify a setting *and* a value for that setting, DOLT!";
         } else {
-            SettingEnum settingStatus = settings.removeBotSetting(settingName);
+            SettingEnum settingStatus = settings.removeSetting(settingName);
             switch (settingStatus) {
                 case SUCCESSFUL:
                     reply = " The setting has been reset!"; break;

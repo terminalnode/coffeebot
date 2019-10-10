@@ -27,7 +27,7 @@ public class UnSetCommand extends Command {
         if (settingName.isBlank()) {
             reply = " You need to specify a setting *and* a value for that setting, DOLT!";
         } else {
-            SettingEnum settingStatus = settings.removeUserSetting(event.getAuthor(), settingName);
+            SettingEnum settingStatus = settings.removeSetting(event.getAuthor(), settingName);
             switch (settingStatus) {
                 case SUCCESSFUL:
                     reply = " The setting has been reset!"; break;

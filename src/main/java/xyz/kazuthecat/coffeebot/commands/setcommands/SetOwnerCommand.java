@@ -34,7 +34,7 @@ public class SetOwnerCommand extends Command {
         if (value.isBlank()) {
             reply = " You need to specify a setting *and* a value for that setting, DOLT!";
         } else {
-            SettingEnum settingStatus = settings.putBotSetting(settingName, value);
+            SettingEnum settingStatus = settings.putSetting(settingName, value);
             switch (settingStatus) {
                 case SUCCESSFUL:
                     reply = " The bot settings have been updated!"; break;

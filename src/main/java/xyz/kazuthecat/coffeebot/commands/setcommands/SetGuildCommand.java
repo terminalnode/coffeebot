@@ -35,7 +35,7 @@ public class SetGuildCommand extends Command {
         if (value.isBlank()) {
             reply = " You need to specify a setting *and* a value for that setting, DOLT!";
         } else {
-            SettingEnum settingStatus = settings.putGuildSetting(event.getGuild(), settingName, value);
+            SettingEnum settingStatus = settings.putSetting(event.getGuild(), settingName, value);
             switch (settingStatus) {
                 case SUCCESSFUL:
                     reply = " The server settings have been updated!"; break;

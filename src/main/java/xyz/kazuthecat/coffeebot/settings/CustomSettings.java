@@ -1,7 +1,6 @@
 package xyz.kazuthecat.coffeebot.settings;
 
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 
 import java.util.HashMap;
@@ -13,11 +12,10 @@ import java.util.Map;
  * changed by users/admins before doing so.
  */
 public class CustomSettings {
-    private final String name; // Used only  for error messages.
-    private final Map<String, String> idValues;
+    private final String name; // Used only for error messages.
+    private final Map<String, String> values;
     private boolean userChangeable;
     private boolean adminChangeable;
-    private String alteredDefault;
 
     /**
      * Default constructor.
@@ -28,58 +26,22 @@ public class CustomSettings {
      */
     CustomSettings(String name, boolean userChangeable, boolean adminChangeable, String alteredDefault) {
         this.name = name;
-        this.userChangeable = userChangeable;
-        this.adminChangeable = adminChangeable;
-
-        this.idValues = new HashMap<>();
-        this.alteredDefault = alteredDefault;
+        this.values = new HashMap<>();
+        this.values.put("DEFAULT", alteredDefault);
     }
 
     void setUserChangeable(boolean setting) { userChangeable = setting; }
     void setAdminChangeable(boolean setting) { adminChangeable = setting; }
     public String getName() { return name; }
 
-    /**
-     * Retrieves the most relevant setting for a given user/guild combination, if the setting is set for user/admin
-     * this setting is returned. If it is not set the altered default (which may be null) is returned.
-     * @param message The message context for which the setting will be retrieved.
-     * @return The string value for the setting (may be null).
-     */
-    String getSetting(Message message) {
-        String setting = alteredDefault;
-
-        if (adminChangeable && message.isFromGuild()) {
-            String guildSetting = idValues.get(message.getGuild().getId());
-            if (guildSetting != null) { setting = guildSetting; }
-        }
-
-        if (userChangeable) {
-            String userSetting = idValues.get(message.getAuthor().getId());
-            if (userSetting != null) { setting = userSetting; }
-        }
-
-        return setting; // May be null!
-    }
 
     /**
-     * Method for setting a new default value.
-     * @param value The value for the new default.
+     * Retrieves a setting for a certain identifier.
+     * @param identifier A guild ID, a user ID or "DEFAULT".
+     * @return A string with the given setting, or null if it does not exist.
      */
-    void setDefault(String value) {
-        alteredDefault = value;
-    }
-
-    /**
-     * Method for unsetting an altered default value.
-     * @return A SettingEnum indicating whether the operation was successful.
-     */
-    SettingEnum unsetDefault() {
-        if (alteredDefault != null) {
-            alteredDefault = null;
-            return SettingEnum.SUCCESSFUL;
-        } else {
-            return SettingEnum.NOTSET;
-        }
+    String getSetting(String identifier) {
+        return values.get(identifier);
     }
 
     /**
@@ -90,7 +52,8 @@ public class CustomSettings {
      */
     SettingEnum putSetting(User user, String value) {
         if (adminChangeable) {
-            return putSetting(user.getId(), user.getName(), "user", value);
+            String receiver = "user " + user.getName();
+            return putSetting(user.getId(), receiver, value);
         } else {
             return SettingEnum.FORBIDDEN;
         }
@@ -104,19 +67,28 @@ public class CustomSettings {
      */
     SettingEnum putSetting(Guild guild, String value) {
         if (adminChangeable) {
-            return putSetting(guild.getId(), guild.getName(), "guild", value);
+            String receiver = "guild " + guild.getName();
+            return putSetting(guild.getId(), receiver, value);
         } else {
             return SettingEnum.FORBIDDEN;
         }
     }
 
-    private SettingEnum putSetting(String id, String receiver, String requestType, String value) {
+    /**
+     * Method for setting a new default value.
+     * @param value The value for the new default.
+     */
+    SettingEnum putSetting(String value) {
+        return putSetting("DEFAULT", "bot default", value);
+    }
+
+    private SettingEnum putSetting(String id, String receiver, String value) {
         try {
-            idValues.put(id, value);
+            values.put(id, value);
             return SettingEnum.SUCCESSFUL;
         } catch (Exception e) {
             System.out.print("Error: Could not remove setting " + name);
-            System.out.println(" for " + requestType + " " + receiver);
+            System.out.println(" for " + receiver);
             System.out.println(e.toString());
             return SettingEnum.ERROR;
         }
@@ -129,7 +101,8 @@ public class CustomSettings {
      */
     SettingEnum removeSetting(User user) {
         if (userChangeable) {
-            return removeSetting(user.getId(), user.getName(), "user");
+            String receiver = "user " + user.getName();
+            return removeSetting(user.getId(), receiver);
         } else {
             return SettingEnum.FORBIDDEN;
         }
@@ -142,23 +115,32 @@ public class CustomSettings {
      */
     SettingEnum removeSetting(Guild guild) {
         if (adminChangeable) {
-            return removeSetting(guild.getId(), guild.getName(), "guild");
+            String receiver = "guild " + guild.getName();
+            return removeSetting(guild.getId(), receiver);
         } else {
             return SettingEnum.FORBIDDEN;
         }
     }
 
-    private SettingEnum removeSetting(String id, String receiver, String requestType) {
+    /**
+     * Method for unsetting an altered default value.
+     * @return A SettingEnum indicating whether the operation was successful.
+     */
+    SettingEnum removeSetting() {
+        return removeSetting("DEFAULT", "bot default");
+    }
+
+    private SettingEnum removeSetting(String id, String receiver) {
         try {
-            if (idValues.containsKey(id)) {
-                idValues.remove(id);
+            if (values.containsKey(id)) {
+                values.remove(id);
                 return SettingEnum.SUCCESSFUL;
             } else {
                 return SettingEnum.NOTSET;
             }
         } catch (Exception e) {
             System.out.print("Error: Could not remove setting " + name);
-            System.out.println(" for " + requestType + " " + receiver);
+            System.out.println(" for " + receiver);
             System.out.println(e.toString());
             return SettingEnum.ERROR;
         }

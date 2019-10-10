@@ -1,13 +1,12 @@
 package xyz.kazuthecat.coffeebot.listeners;
 
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import xyz.kazuthecat.coffeebot.settings.Settings;
+import xyz.kazuthecat.coffeebot.settings.SettingsFile;
 
 import java.util.concurrent.TimeUnit;
 
@@ -23,10 +22,10 @@ import java.util.concurrent.TimeUnit;
  */
 public class HelloListener extends ListenerAdapter {
     private final EventWaiter waiter;
-    private final Settings settings;
+    private final SettingsFile settings;
     private final String questionSetting, responseSetting;
 
-    public HelloListener(EventWaiter waiter, Settings settings) {
+    public HelloListener(EventWaiter waiter, SettingsFile settings) {
         this.waiter = waiter;
         this.settings = settings;
 

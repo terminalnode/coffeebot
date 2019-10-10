@@ -1,6 +1,6 @@
 package xyz.kazuthecat.coffeebot;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import xyz.kazuthecat.coffeebot.settings.Settings;
+import xyz.kazuthecat.coffeebot.settings.SettingsFile;
 import xyz.kazuthecat.coffeebot.listeners.*;
 import xyz.kazuthecat.coffeebot.commands.*;
 import xyz.kazuthecat.coffeebot.commands.setcommands.*;
@@ -26,7 +26,10 @@ public class Main {
         // First line should be bot token, second line owner ID.
         List<String> configFile = Files.readAllLines(Paths.get("config"));
         String token = configFile.get(0).strip();
-        String ownerID = configFile.get(1);
+        String ownerID = configFile.get(1).strip();
+        String dbAddr = configFile.get(2).strip();
+        String dbUser = configFile.get(3).strip();
+        String dbPass = configFile.get(4).strip();
 
         // BUILD CLIENT
         // Setting some client options.
@@ -35,7 +38,7 @@ public class Main {
         client.setPrefix("?");                              // ? because we never know if it will work
         client.setStatus(OnlineStatus.DO_NOT_DISTURB);      // Always busy...
         client.setActivity(Activity.playing("with Java"));  // ...doin' sum Java.
-        Settings settings = new Settings();                 // Holds all of our settings, obviously.
+        SettingsFile settings = new SettingsFile();         // Holds all of our settings, obviously.
 
         // EventWaiter is required for certain functions where we await some specific event.
         // For example when we want to reply to a user or something.

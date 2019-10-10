@@ -2,23 +2,15 @@ package xyz.kazuthecat.coffeebot.commands.setcommands;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.GuildChannel;
-import net.dv8tion.jda.api.entities.Member;
 import xyz.kazuthecat.coffeebot.settings.CustomSettings;
-import xyz.kazuthecat.coffeebot.settings.Settings;
+import xyz.kazuthecat.coffeebot.settings.SettingsFile;
 
-import java.util.Collections;
-import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class SetListCommand extends Command {
-    private final Settings settings;
+    private final SettingsFile settings;
 
-    public SetListCommand(Settings settings) {
+    public SetListCommand(SettingsFile settings) {
         this.name = "setlist";
         this.aliases = new String[]{"listset,settings"};
         this.help = "lets you search for settings";

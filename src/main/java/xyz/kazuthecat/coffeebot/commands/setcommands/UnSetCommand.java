@@ -3,12 +3,12 @@ package xyz.kazuthecat.coffeebot.commands.setcommands;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import xyz.kazuthecat.coffeebot.settings.SettingEnum;
-import xyz.kazuthecat.coffeebot.settings.Settings;
+import xyz.kazuthecat.coffeebot.settings.SettingsFile;
 
 public class UnSetCommand extends Command {
-    private final Settings settings;
+    private final SettingsFile settings;
 
-    public UnSetCommand(Settings settings) {
+    public UnSetCommand(SettingsFile settings) {
         this.name = "unset";
         this.help = "unsets a setting for the current user";
         this.arguments = "settingName";

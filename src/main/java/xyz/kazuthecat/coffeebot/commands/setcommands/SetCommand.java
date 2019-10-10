@@ -3,15 +3,15 @@ package xyz.kazuthecat.coffeebot.commands.setcommands;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import xyz.kazuthecat.coffeebot.settings.SettingEnum;
-import xyz.kazuthecat.coffeebot.settings.Settings;
+import xyz.kazuthecat.coffeebot.settings.SettingsFile;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public class SetCommand extends Command {
-    private final Settings settings;
+    private final SettingsFile settings;
 
-    public SetCommand(Settings settings) {
+    public SetCommand(SettingsFile settings) {
         this.name = "set";
         this.help = "sets a setting for the current user";
         this.arguments = "settingName value";

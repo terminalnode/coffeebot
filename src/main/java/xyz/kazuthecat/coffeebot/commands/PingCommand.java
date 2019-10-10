@@ -2,15 +2,15 @@ package xyz.kazuthecat.coffeebot.commands;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import xyz.kazuthecat.coffeebot.settings.Settings;
+import xyz.kazuthecat.coffeebot.settings.SettingsFile;
 
 /* This function is a sort of demo function where all the various parts of the command
  * class and important syntax stuff (mostly lambda functions) are explained for future reference. */
 public class PingCommand extends Command {
-    private final Settings settings;
+    private final SettingsFile settings;
     private final String pingSetting;
 
-    public PingCommand(Settings settings) {
+    public PingCommand(SettingsFile settings) {
         /* this.name/help/guildOnly are values used for various functions and for the
            most part self explanatory. guildOnly makes it not work in DMs, help is
            printed in the help menu, name is the name used in help menus and when

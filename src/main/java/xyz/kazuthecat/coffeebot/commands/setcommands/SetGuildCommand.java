@@ -4,15 +4,15 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import net.dv8tion.jda.api.Permission;
 import xyz.kazuthecat.coffeebot.settings.SettingEnum;
-import xyz.kazuthecat.coffeebot.settings.Settings;
+import xyz.kazuthecat.coffeebot.settings.SettingsFile;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public class SetGuildCommand extends Command {
-    private final Settings settings;
+    private final SettingsFile settings;
 
-    public SetGuildCommand(Settings settings) {
+    public SetGuildCommand(SettingsFile settings) {
         this.name = "setserver";
         this.help = "sets a setting for the current guild/server";
         this.aliases = new String[]{"guildset","setguild","serverset"};

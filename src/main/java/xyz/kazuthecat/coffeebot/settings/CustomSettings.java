@@ -14,8 +14,7 @@ import java.util.Map;
  */
 public class CustomSettings {
     private final String name; // Used only  for error messages.
-    private final Map<Long, String> guildValues;
-    private final Map<Long, String> userValues;
+    private final Map<String, String> idValues;
     private boolean userChangeable;
     private boolean adminChangeable;
     private String alteredDefault;
@@ -32,15 +31,12 @@ public class CustomSettings {
         this.userChangeable = userChangeable;
         this.adminChangeable = adminChangeable;
 
-        this.guildValues = new HashMap<>();
-        this.userValues = new HashMap<>();
+        this.idValues = new HashMap<>();
         this.alteredDefault = alteredDefault;
     }
 
     void setUserChangeable(boolean setting) { userChangeable = setting; }
     void setAdminChangeable(boolean setting) { adminChangeable = setting; }
-    public boolean isUserChangeable() { return userChangeable; }
-    public boolean isAdminChangeable() { return adminChangeable; }
     public String getName() { return name; }
 
     /**
@@ -50,19 +46,19 @@ public class CustomSettings {
      * @return The string value for the setting (may be null).
      */
     String getSetting(Message message) {
-        if (userChangeable) {
-            String userSetting = userValues.get(message.getAuthor().getIdLong());
-            if (userSetting != null)
-                return userSetting;
-        }
+        String setting = alteredDefault;
 
         if (adminChangeable && message.isFromGuild()) {
-            String guildSetting = guildValues.get(message.getGuild().getIdLong());
-            if (guildSetting != null)
-                return guildSetting;
+            String guildSetting = idValues.get(message.getGuild().getId());
+            if (guildSetting != null) { setting = guildSetting; }
         }
 
-        return alteredDefault; // May be null!
+        if (userChangeable) {
+            String userSetting = idValues.get(message.getAuthor().getId());
+            if (userSetting != null) { setting = userSetting; }
+        }
+
+        return setting; // May be null!
     }
 
     /**
@@ -87,43 +83,16 @@ public class CustomSettings {
     }
 
     /**
-     * Method for personalizing the setting for a user.
+     * Method for customizing the setting for a user.
      * @param user The user who wishes to customise the setting.
      * @param value The value which the setting will have for this user.
      * @return A SettingEnum indicating whether the operation was successful.
      */
-    SettingEnum putUserSetting(User user, String value) {
-        if (userChangeable) {
-            try {
-                userValues.put(user.getIdLong(), value);
-                return SettingEnum.SUCCESSFUL;
-            } catch (Exception e) {
-                System.out.println("Error: Could not change setting " + name + " for user " + user.getName());
-                System.out.println(e.toString());
-                return SettingEnum.ERROR;
-            }
+    SettingEnum putSetting(User user, String value) {
+        if (adminChangeable) {
+            return putSetting(user.getId(), user.getName(), "user", value);
         } else {
             return SettingEnum.FORBIDDEN;
-        }
-    }
-
-    /**
-     * Method for removing the setting made for a given user.
-     * @param user The user who wishes to reset the setting.
-     * @return A SettingEnum indicating whether the operation was successful.
-     */
-    SettingEnum removeUserSetting(User user) {
-        try {
-            if (userValues.containsKey(user.getIdLong())) {
-                userValues.remove(user.getIdLong());
-                return SettingEnum.SUCCESSFUL;
-            } else {
-                return SettingEnum.NOTSET;
-            }
-        } catch (Exception e) {
-            System.out.println("Error: Could not remove setting " + name + " for user " + user.getName());
-            System.out.println(e.toString());
-            return SettingEnum.ERROR;
         }
     }
 
@@ -133,16 +102,34 @@ public class CustomSettings {
      * @param value The value which the setting will have for this server/guild.
      * @return A SettingEnum indicating whether the operation was successful.
      */
-    SettingEnum putGuildSetting(Guild guild, String value) {
+    SettingEnum putSetting(Guild guild, String value) {
         if (adminChangeable) {
-            try {
-                guildValues.put(guild.getIdLong(), value);
-                return SettingEnum.SUCCESSFUL;
-            } catch (Exception e) {
-                System.out.println("Error: Could not change setting " + name + " for guild " + guild.getName());
-                System.out.println(e.toString());
-                return SettingEnum.ERROR;
-            }
+            return putSetting(guild.getId(), guild.getName(), "guild", value);
+        } else {
+            return SettingEnum.FORBIDDEN;
+        }
+    }
+
+    private SettingEnum putSetting(String id, String receiver, String requestType, String value) {
+        try {
+            idValues.put(id, value);
+            return SettingEnum.SUCCESSFUL;
+        } catch (Exception e) {
+            System.out.print("Error: Could not remove setting " + name);
+            System.out.println(" for " + requestType + " " + receiver);
+            System.out.println(e.toString());
+            return SettingEnum.ERROR;
+        }
+    }
+
+    /**
+     * Method for removing the setting made for a given user.
+     * @param user The user who wishes to reset the setting.
+     * @return A SettingEnum indicating whether the operation was successful.
+     */
+    SettingEnum removeSetting(User user) {
+        if (userChangeable) {
+            return removeSetting(user.getId(), user.getName(), "user");
         } else {
             return SettingEnum.FORBIDDEN;
         }
@@ -153,16 +140,25 @@ public class CustomSettings {
      * @param guild The guild that wishes to reset their setting.
      * @return A SettingEnum indicating whether the operation was successful.
      */
-    SettingEnum removeGuildSetting(Guild guild) {
+    SettingEnum removeSetting(Guild guild) {
+        if (adminChangeable) {
+            return removeSetting(guild.getId(), guild.getName(), "guild");
+        } else {
+            return SettingEnum.FORBIDDEN;
+        }
+    }
+
+    private SettingEnum removeSetting(String id, String receiver, String requestType) {
         try {
-            if (guildValues.containsKey((guild.getIdLong()))) {
-                guildValues.remove(guild.getIdLong());
+            if (idValues.containsKey(id)) {
+                idValues.remove(id);
                 return SettingEnum.SUCCESSFUL;
             } else {
                 return SettingEnum.NOTSET;
             }
         } catch (Exception e) {
-            System.out.println("Error: Could not remove setting " + name + " for user " + guild.getName());
+            System.out.print("Error: Could not remove setting " + name);
+            System.out.println(" for " + requestType + " " + receiver);
             System.out.println(e.toString());
             return SettingEnum.ERROR;
         }

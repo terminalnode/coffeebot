@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 abstract class SettingsAbstract {
     final Gson gson = new Gson();
-    final Map<String, String> defaultSettings = new HashMap<>();
+    private final Map<String, String> defaultSettings = new HashMap<>();
     Map<String, CustomSettings> customSettings = new HashMap<>();
 
     abstract void writeJSON();
@@ -88,7 +88,7 @@ abstract class SettingsAbstract {
         if (defaultSettings.containsKey(identifier)) {
             SettingEnum result = customSettings
                     .get(identifier)
-                    .putUserSetting(user, value);
+                    .putSetting(user, value);
             writeJSON();
             return result;
         } else {
@@ -106,7 +106,7 @@ abstract class SettingsAbstract {
         if (defaultSettings.containsKey(identifier)) {
             SettingEnum result = customSettings
                     .get(identifier)
-                    .removeUserSetting(user);
+                    .removeSetting(user);
             writeJSON();
             return result;
         } else {
@@ -125,7 +125,7 @@ abstract class SettingsAbstract {
         if (defaultSettings.containsKey(identifier)) {
             SettingEnum result = customSettings
                     .get(identifier)
-                    .putGuildSetting(guild, value);
+                    .putSetting(guild, value);
             writeJSON();
             return result;
         } else {
@@ -143,7 +143,7 @@ abstract class SettingsAbstract {
         if (defaultSettings.containsKey(identifier)) {
             SettingEnum result = customSettings
                     .get(identifier)
-                    .removeGuildSetting(guild);
+                    .removeSetting(guild);
             writeJSON();
             return result;
         } else {

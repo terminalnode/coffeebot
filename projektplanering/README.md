@@ -13,6 +13,11 @@ Utöver detta finns två bonusmål, som jag hoppas uppnå men som kanske inte ä
 1. Att exportera boten till ett .jar-format så att den kan startas utanför IntelliJ och till exempel lämnas ensam på en server.
 2. Att databasen över kaffedrickarvanorna ska hostas på Amazon Web Services.
 
+# Uppnådda mål utanför planeringen
+Vissa av kraven på projektarbetet upptäcktes rätt sent och har därför inte varit med i planeringen från början.
+1. Projektet ska implementera arv. Från och med 2019-10-10 så ärver SettingsFile det mesta från SettingsAbstract, vilket tillåter alternativa sätt att spara data i SettingsDB som också ärver från SettingsAbstract.
+2. Projektet ska implementera en meny. Från och med 2019-10-10 så finns det en AltMain som implementerar en liten meny vid uppstart.
+
 # Delmål
 Mål 1 och 2 är skrivna i retrospekt då de redan var avklarade när planeringen påbörjades, de syftar till att beskriva mitt tillvägagångssätt när jag påbörjade projektet. Listan är i nedåtgående ordning med de äldsta målen längst ner.
 

@@ -3,12 +3,12 @@ package xyz.kazuthecat.coffeebot.commands.setcommands;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import xyz.kazuthecat.coffeebot.settings.SettingEnum;
-import xyz.kazuthecat.coffeebot.settings.SettingsFile;
+import xyz.kazuthecat.coffeebot.settings.SettingsAbstract;
 
 public class UnSetOwnerCommand extends Command {
-    private final SettingsFile settings;
+    private final SettingsAbstract settings;
 
-    public UnSetOwnerCommand(SettingsFile settings) {
+    public UnSetOwnerCommand(SettingsAbstract settings) {
         this.name = "unsetowner";
         this.help = "changes the default value for a setting";
         this.aliases = new String[]{"ownerunset", "unsetbot", "botunset"};

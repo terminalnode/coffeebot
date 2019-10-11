@@ -4,12 +4,12 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import net.dv8tion.jda.api.Permission;
 import xyz.kazuthecat.coffeebot.settings.SettingEnum;
-import xyz.kazuthecat.coffeebot.settings.SettingsFile;
+import xyz.kazuthecat.coffeebot.settings.SettingsAbstract;
 
 public class UnSetGuildCommand extends Command {
-    private final SettingsFile settings;
+    private final SettingsAbstract settings;
 
-    public UnSetGuildCommand(SettingsFile settings) {
+    public UnSetGuildCommand(SettingsAbstract settings) {
         this.name = "unsetserver";
         this.help = "unsets a setting for the current guild/server";
         this.aliases = new String[]{"guildunset","unsetguild","serverunset"};

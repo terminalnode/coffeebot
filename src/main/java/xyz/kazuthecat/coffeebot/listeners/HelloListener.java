@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import xyz.kazuthecat.coffeebot.settings.SettingsFile;
+import xyz.kazuthecat.coffeebot.settings.SettingsAbstract;
 
 import java.util.concurrent.TimeUnit;
 
@@ -22,10 +22,10 @@ import java.util.concurrent.TimeUnit;
  */
 public class HelloListener extends ListenerAdapter {
     private final EventWaiter waiter;
-    private final SettingsFile settings;
+    private final SettingsAbstract settings;
     private final String questionSetting, responseSetting;
 
-    public HelloListener(EventWaiter waiter, SettingsFile settings) {
+    public HelloListener(EventWaiter waiter, SettingsAbstract settings) {
         this.waiter = waiter;
         this.settings = settings;
 

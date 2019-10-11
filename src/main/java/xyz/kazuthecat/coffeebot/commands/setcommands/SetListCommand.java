@@ -2,12 +2,12 @@ package xyz.kazuthecat.coffeebot.commands.setcommands;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import xyz.kazuthecat.coffeebot.settings.SettingsFile;
+import xyz.kazuthecat.coffeebot.settings.SettingsAbstract;
 
 public class SetListCommand extends Command {
-    private final SettingsFile settings;
+    private final SettingsAbstract settings;
 
-    public SetListCommand(SettingsFile settings) {
+    public SetListCommand(SettingsAbstract settings) {
         this.name = "setlist";
         this.aliases = new String[]{"listset,settings"};
         this.help = "lets you search for settings";

@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-abstract class SettingsAbstract {
+public abstract class SettingsAbstract {
     final Gson gson = new Gson();
     private final Map<String, String> defaultSettings = new HashMap<>();
     private Map<String, Boolean> userChangeable = new HashMap<>();

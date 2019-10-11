@@ -3,15 +3,15 @@ package xyz.kazuthecat.coffeebot.commands.setcommands;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import xyz.kazuthecat.coffeebot.settings.SettingEnum;
-import xyz.kazuthecat.coffeebot.settings.SettingsFile;
+import xyz.kazuthecat.coffeebot.settings.SettingsAbstract;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public class SetOwnerCommand extends Command {
-    private final SettingsFile settings;
+    private final SettingsAbstract settings;
 
-    public SetOwnerCommand(SettingsFile settings) {
+    public SetOwnerCommand(SettingsAbstract settings) {
         this.name = "setowner";
         this.help = "changes the default value for a setting";
         this.aliases = new String[]{"ownerset", "setbot", "botset"};

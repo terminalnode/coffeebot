@@ -2,10 +2,7 @@ package xyz.kazuthecat.coffeebot.commands.setcommands;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import xyz.kazuthecat.coffeebot.settings.CustomSettings;
 import xyz.kazuthecat.coffeebot.settings.SettingsFile;
-
-import java.util.stream.Collectors;
 
 public class SetListCommand extends Command {
     private final SettingsFile settings;
@@ -24,15 +21,8 @@ public class SetListCommand extends Command {
 
     @Override
     protected void execute(CommandEvent event) {
-        String searchTerm = String.join(
-                ".",
-                event.getArgs().split(" ")
-        );
-        String allSettings = settings
-                .allSettingsContaining(searchTerm)
-                .stream()
-                .map(CustomSettings::getName)
-                .collect(Collectors.joining(", "));
+        String searchTerm = String.join(".", event.getArgs().split(" "));
+        String allSettings = String.join(", ", settings.allSettingsContaining(searchTerm));
 
         if (!allSettings.isBlank()) {
             event.reply(event.getAuthor().getAsMention() + " These are the settings I could find:\n" + allSettings);

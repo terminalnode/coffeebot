@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class keeps track of all the individual settings, any changes to
@@ -32,7 +33,7 @@ public class SettingsFile extends SettingsAbstract {
         try {
             Path settingsPath = Paths.get(settingsFile);
             String json = Files.readString(settingsPath);
-            Type settingsMapType = new TypeToken<HashMap<String, CustomSettings>>() {}.getType();
+            Type settingsMapType = new TypeToken<HashMap<String, Map<String, String>>>() {}.getType();
             customSettings = gson.fromJson(json, settingsMapType);
         } catch (Exception e) {
             System.out.println("Something went wrong when trying to load json.");

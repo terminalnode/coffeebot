@@ -15,7 +15,7 @@ abstract class SettingsAbstract {
     private final Map<String, String> defaultSettings = new HashMap<>();
     private Map<String, Boolean> userChangeable = new HashMap<>();
     private Map<String, Boolean> adminChangeable = new HashMap<>();
-    Map<String, CustomSettings> customSettings = new HashMap<>();
+    Map<String, Map<String, String>> customSettings = new HashMap<>();
 
     abstract void writeJSON();
 
@@ -33,14 +33,7 @@ abstract class SettingsAbstract {
         defaultSettings.put(settingName, defaultValue);
         this.userChangeable.put(settingName, userChangeable);
         this.adminChangeable.put(settingName, adminChangeable);
-
-        CustomSettings setting = customSettings.get(settingName);
-        if (setting == null) {
-            customSettings.put(settingName, new CustomSettings(settingName, userChangeable, adminChangeable, null));
-        } else {
-            setting.setAdminChangeable(adminChangeable);
-            setting.setUserChangeable(userChangeable);
-        }
+        customSettings.computeIfAbsent(settingName, k -> new HashMap<>());
     }
 
     /**
@@ -51,14 +44,10 @@ abstract class SettingsAbstract {
      * @return A SettingEnum indicating whether the operation was successful.
      */
     public SettingEnum putSetting(User user, String settingName, String value) {
-        if (defaultSettings.containsKey(settingName)) {
-            SettingEnum result = customSettings
-                    .get(settingName)
-                    .putSetting(user, value);
-            writeJSON();
-            return result;
+        if (!userChangeable.get(settingName)) {
+            return SettingEnum.FORBIDDEN;
         } else {
-            return SettingEnum.DOESNOTEXIST;
+            return putSetting(user.getId(), settingName, value);
         }
     }
 
@@ -70,14 +59,10 @@ abstract class SettingsAbstract {
      * @return A SettingEnum indicating whether the operation was successful.
      */
     public SettingEnum putSetting(Guild guild, String settingName, String value) {
-        if (defaultSettings.containsKey(settingName)) {
-            SettingEnum result = customSettings
-                    .get(settingName)
-                    .putSetting(guild, value);
-            writeJSON();
-            return result;
+        if (!userChangeable.get(settingName)) {
+            return SettingEnum.FORBIDDEN;
         } else {
-            return SettingEnum.DOESNOTEXIST;
+            return putSetting(guild.getId(), settingName, value);
         }
     }
 
@@ -89,67 +74,69 @@ abstract class SettingsAbstract {
      * @return A SettingEnum indicating whether the operation was successful.
      */
     public SettingEnum putSetting(String settingName, String value) {
-        if (defaultSettings.containsKey(settingName)) {
-            SettingEnum result = customSettings
-                    .get(settingName)
-                    .putSetting(value);
-            writeJSON();
-            return result;
-        } else {
+        return putSetting("DEFAULT", settingName, value);
+    }
+
+    private SettingEnum putSetting(String key, String settingName, String value) {
+        if (!defaultSettings.containsKey(settingName)) {
             return SettingEnum.DOESNOTEXIST;
+        } else {
+            customSettings.get(settingName).put(key, value);
+            writeJSON();
+            return SettingEnum.SUCCESSFUL;
         }
     }
 
     /**
      * Method for resetting a setting for an individual user.
      * @param user The User object for the user.
-     * @param identifier The name of the setting.
+     * @param settingName The name of the setting.
      * @return A SettingEnum indicating whether the operation was successful.
      */
-    public SettingEnum removeSetting(User user, String identifier) {
-        if (defaultSettings.containsKey(identifier)) {
-            SettingEnum result = customSettings
-                    .get(identifier)
-                    .removeSetting(user);
-            writeJSON();
-            return result;
+    public SettingEnum removeSetting(User user, String settingName) {
+        if (!userChangeable.get(settingName)) {
+            return SettingEnum.FORBIDDEN;
         } else {
-            return SettingEnum.DOESNOTEXIST;
+            return removeSetting(user.getId(), settingName);
         }
     }
 
     /**
      * Method for resetting a setting for a specific server.
      * @param guild The Guild object for the server.
-     * @param identifier The name of the setting.
+     * @param settingName The name of the setting.
      * @return A SettingEnum indicating whether the operation was successful.
      */
-    public SettingEnum removeSetting(Guild guild, String identifier) {
-        if (defaultSettings.containsKey(identifier)) {
-            SettingEnum result = customSettings
-                    .get(identifier)
-                    .removeSetting(guild);
-            writeJSON();
-            return result;
+    public SettingEnum removeSetting(Guild guild, String settingName) {
+        if (!userChangeable.get(settingName)) {
+            return SettingEnum.FORBIDDEN;
         } else {
-            return SettingEnum.DOESNOTEXIST;
+            return removeSetting(guild.getId(), settingName);
         }
     }
 
     /**
      * Method for resetting a changed default value to the default provided by the command itself.
-     * @param identifier The name of the setting.
+     * @param settingName The name of the setting.
      * @return A SettingEnum indicating whether the operation was successful.
      */
-    public SettingEnum removeSetting(String identifier) {
-        if (defaultSettings.containsKey(identifier)) {
-            SettingEnum result = customSettings
-                    .get(identifier)
-                    .removeSetting();
-            writeJSON();
-            return result;
+    public SettingEnum removeSetting(String settingName) {
+        return removeSetting("DEFAULT", settingName);
+    }
+
+    private SettingEnum removeSetting(String key, String settingName) {
+        if (!defaultSettings.containsKey(settingName)) {
+            return SettingEnum.DOESNOTEXIST;
+        } else {
+            Map<String, String> setting = customSettings.get(settingName);
+            if (setting.containsKey(key)) {
+                customSettings.get(settingName).remove(key);
+                writeJSON();
+                return SettingEnum.SUCCESSFUL;
+            } else {
+                return SettingEnum.NOTSET;
+            }
         }
-        return SettingEnum.DOESNOTEXIST;
     }
 
     /**
@@ -164,14 +151,14 @@ abstract class SettingsAbstract {
      */
     public String getSetting(String settingName, Message message) {
         String botSetting = null, userSetting = null, guildSetting = null, result;
-        CustomSettings setting = customSettings.get(settingName);
+        Map<String, String> setting = customSettings.get(settingName);
 
         if (setting != null) {
             if (userChangeable.get(settingName))
-                userSetting = setting.getSetting(message.getAuthor().getId());
+                userSetting = setting.get(message.getAuthor().getId());
             if (adminChangeable.get(settingName) && message.isFromGuild())
-                guildSetting = setting.getSetting(message.getGuild().getId());
-            botSetting = setting.getSetting("DEFAULT");
+                guildSetting = setting.get(message.getGuild().getId());
+            botSetting = setting.get("DEFAULT");
         }
 
         if (userSetting != null) {
@@ -204,12 +191,13 @@ abstract class SettingsAbstract {
     /**
      * Method for searching through the settings by looking for setting names containing the provided substring.
      * @param substring The substring we're filtering settings based on.
-     * @return A set of CustomSettings whose names contain the provided substring.
+     * @return A set of setting names (String) whose names contain the provided substring.
      */
-    public Set<CustomSettings> allSettingsContaining(String substring) {
-        return customSettings.entrySet().stream()
-                .filter(x -> x.getKey().contains(substring))
-                .map(Map.Entry::getValue)
+    public Set<String> allSettingsContaining(String substring) {
+        return customSettings
+                .keySet()
+                .stream()
+                .filter(x -> x.contains(substring))
                 .collect(Collectors.toSet());
     }
 }

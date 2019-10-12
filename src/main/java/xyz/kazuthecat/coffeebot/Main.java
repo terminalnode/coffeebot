@@ -1,6 +1,7 @@
 package xyz.kazuthecat.coffeebot;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import xyz.kazuthecat.coffeebot.settings.SettingsFile;
+import xyz.kazuthecat.coffeebot.databases.DBHandler;
+import xyz.kazuthecat.coffeebot.settings.SettingsDB;
 import xyz.kazuthecat.coffeebot.listeners.*;
 import xyz.kazuthecat.coffeebot.commands.*;
 import xyz.kazuthecat.coffeebot.commands.setcommands.*;
@@ -38,7 +39,9 @@ public class Main {
         client.setPrefix("?");                              // ? because we never know if it will work
         client.setStatus(OnlineStatus.DO_NOT_DISTURB);      // Always busy...
         client.setActivity(Activity.playing("with Java"));  // ...doin' sum Java.
-        SettingsFile settings = new SettingsFile();         // Holds all of our settings, obviously.
+        //SettingsFile settings = new SettingsFile();         // Holds all of our settings, obviously.
+        DBHandler dbHandler = new DBHandler(dbAddr, dbUser, dbPass);
+        SettingsDB settings = new SettingsDB(dbHandler);           // Holds all of our settings, obviously.
 
         // EventWaiter is required for certain functions where we await some specific event.
         // For example when we want to reply to a user or something.
@@ -64,10 +67,10 @@ public class Main {
                 new UnSetGuildCommand(settings),
                 new SetOwnerCommand(settings),
                 new UnSetOwnerCommand(settings),
-                new SetListCommand(settings)
+                new SetListCommand(settings),
 
                 // Other commands
-                // There's nothing here yet... :(
+                new CoffeeLog(dbHandler)
         );
 
         // Go online!

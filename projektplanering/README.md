@@ -11,7 +11,7 @@ De ultimata målen för projektarbetet är:
 
 Utöver detta finns två bonusmål, som jag hoppas uppnå men som kanske inte är rimligt inom projektets tidsramar:
 1. Att exportera boten till ett .jar-format så att den kan startas utanför IntelliJ och till exempel lämnas ensam på en server.
-2. Att databasen över kaffedrickarvanorna ska hostas på Amazon Web Services.
+2. ~~Att databasen över kaffedrickarvanorna ska hostas på Amazon Web Services.~~
 
 # Uppnådda mål utanför planeringen
 Vissa av kraven på projektarbetet upptäcktes rätt sent och har därför inte varit med i planeringen från början.
@@ -21,38 +21,63 @@ Vissa av kraven på projektarbetet upptäcktes rätt sent och har därför inte 
 # Delmål
 Mål 1 och 2 är skrivna i retrospekt då de redan var avklarade när planeringen påbörjades, de syftar till att beskriva mitt tillvägagångssätt när jag påbörjade projektet. Listan är i nedåtgående ordning med de äldsta målen längst ner.
 
-## Delmål 9: Registrera kaffekopparna i en databas
-I bästa fall kör vi direkt på AWS för databasen, men SQLite är acceptabelt i det här stadiet. Användaren behöver inte kunna utläsa informationen som sparas eller registrera den.
+## Delmål 12: De inställningar som boten sparat i databasen ska även kunna läsas av boten
+Delmål 11 specificerar endast att inställningarna ska kunna sparas i databasen, men att kunna spara saker i databasen är föga användbart om vi inte kommer åt dem.
 
 Detta mål är uppnått när:
-* Outputen från ?coffeelog sparats i en databas.
+* Inställningar kan både sparas och läsas från databasen.
 
 **Status:** Ej implementerat
 
-## Delmål 8: Implementera ett kommando för att spara kaffekoppar
-När en användare använder detta kommando ska de kunna registera en drucken kaffe. I första steget behöver inte denna data sparas någonstans, bara noteras och parseas.
+## Delmål 11: Botens inställningar ska också kunna sparas i databasen
+SettingsDB fungerar inte än, den måste kunna spara inställningarna i databasen genom writeJSON() funktionen.
 
 Detta mål är uppnått när:
-* ?coffeelog eller liknande kan användas för att registrera en kopp kaffe.
-* Användaren ska optionally kunna specificera ett antal detaljer om sin kopp kaffe.
+* Nya inställningar registreras korrekt i databasen.
 
 **Status:** Ej implementerat
 
-## Delmål 7: Inställningar ska kunna nollas genom Discord
+## Delmål 10: Användare ska kunna kolla hur många kaffekoppar de har druckit
+DBHandler kan just nu bara utföra uppgifter som inte ger någon returdata, den har inget stöd för queries. För att implementera och enkelt testa detta utökas funktionaliteten i `?coffeelog` med ett subcommando för att se antalet koppar kaffe man registrerat.
+
+När detta mål är uppnått är mål #4 för projektet uppnått.
+
+Detta mål är uppnått när:
+* `?coffeelog check` ger användare information om hur många koppar kaffe de druckit hittills.
+
+**Status:** Ej implementerat
+
+## ~~Delmål 8 och 9: Registrera antalet druckna kopppar kaffe i en databas~~
+Delmål 8 och 9 flöt ihop eftersom databasstrukturen började arbetas på före `?coffeelog`, respektive delmåls mission statements återfinns nedan.
+
+(Delmål 8) När en användare använder detta kommando ska de kunna registera en drucken kaffe. I första steget behöver inte denna data sparas någonstans, bara noteras och parseas.
+
+(Delmål 9) I bästa fall kör vi direkt på AWS för databasen, men SQLite är acceptabelt i det här stadiet. Användaren behöver inte kunna utläsa informationen som sparas eller registrera den.
+
+Detta mål är uppnått när:
+* (Delmål 8) `?coffeelog` eller liknande kan användas för att registrera en kopp kaffe.
+* (Delmål 8) Användaren ska optionally kunna specificera ett antal detaljer om sin kopp kaffe.
+* (Delmål 9) Outputen från ?coffeelog sparats i en databas.
+
+**Status:** Klart 2019-10-12
+
+`?coffeelog add` fungerar nu och användarna kan om de vill specificera hur många koppar de vill lägga till.
+
+## ~~Delmål 7: Inställningar ska kunna nollas genom Discord~~
 Detta mål är uppnått när:
 * ?unset, ?unsetguild, och ?unsetowner är implementerade och återställer standardvärdet för en inställning.
 * Ett återställt värde hålls återställt vid omstart av boten.
 
 **Status:** Klart 2019-09-30 eller 2019-09-29 typ.
 
-Kommandona ?unset ?unsetguild och ?unsetbot följt av ett inställningsnamn kan användas för att nolla inställningar.
+Kommandona `?unset`, `?unsetguild` och `?unsetbot` följt av ett inställningsnamn kan användas för att nolla inställningar.
 
 ## ~~Delmål 6: Tillgängliga inställningar ska kunna sökas efter genom Discord~~
 Det finns redan en funktion för att filtrera alla inställningar beroende på om de innehåller en given substräng. Gör ett kommando av det här.
 
 **Status:** Klart 2019-09-27
 
-Kommandot ?setlist följt av en eller flera söktermer listar alla tillgängliga inställningar som innehåller söksträngen.
+Kommandot `?setlist` följt av en eller flera söktermer listar alla tillgängliga inställningar som innehåller söksträngen.
 
 ## ~~Delmål 5: Inställningar ska kunna göras genom Discord och sparas i JSON~~
 Användare ska kunna göra inställningar som sparas i JSON-format på disk och laddas när boten startar.

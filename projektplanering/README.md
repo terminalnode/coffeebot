@@ -21,21 +21,24 @@ Vissa av kraven på projektarbetet upptäcktes rätt sent och har därför inte 
 # Delmål
 Mål 1 och 2 är skrivna i retrospekt då de redan var avklarade när planeringen påbörjades, de syftar till att beskriva mitt tillvägagångssätt när jag påbörjade projektet. Listan är i nedåtgående ordning med de äldsta målen längst ner.
 
-## Delmål 12: De inställningar som boten sparat i databasen ska även kunna läsas av boten
-Delmål 11 specificerar endast att inställningarna ska kunna sparas i databasen, men att kunna spara saker i databasen är föga användbart om vi inte kommer åt dem.
-
-Detta mål är uppnått när:
-* Inställningar kan både sparas och läsas från databasen.
-
-**Status:** Ej implementerat
-
-## Delmål 11: Botens inställningar ska också kunna sparas i databasen
+## Delmål 12: Botens inställningar ska också kunna sparas i databasen
 SettingsDB fungerar inte än, den måste kunna spara inställningarna i databasen genom writeJSON() funktionen.
 
 Detta mål är uppnått när:
 * Nya inställningar registreras korrekt i databasen.
 
 **Status:** Ej implementerat
+
+## ~~Delmål 11: De inställningar som boten sparat i databasen ska även kunna läsas av boten~~
+(Tidigare delmål 12 men gjordes i omvänd ordning)
+Inställningar som sparats i databasen ska kunna läsas av boten.
+
+Detta mål är uppnått när:
+* Inställningar kan läsas från databasen.
+
+**Status:** Implementerat 2019-10-12
+
+Inställningar som lagts in manuellt kan läsas och raderas av boten.
 
 ## ~~Delmål 10: Användare ska kunna kolla hur många kaffekoppar de har druckit~~
 DBHandler kan just nu bara utföra uppgifter som inte ger någon returdata, den har inget stöd för queries. För att implementera och enkelt testa detta utökas funktionaliteten i `?coffeelog` med ett subcommando för att se antalet koppar kaffe man registrerat.

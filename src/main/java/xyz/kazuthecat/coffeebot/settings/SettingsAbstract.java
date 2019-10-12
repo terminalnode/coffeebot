@@ -17,7 +17,7 @@ public abstract class SettingsAbstract {
     private Map<String, Boolean> adminChangeable = new HashMap<>();
     Map<String, Map<String, String>> customSettings = new HashMap<>();
 
-    abstract void writeJSON();
+    abstract void writeJSON(String settingName, String id, String value);
 
     /**
      * This function is called by each command that wants to add it's settings. Each call creates
@@ -77,12 +77,12 @@ public abstract class SettingsAbstract {
         return putSetting("DEFAULT", settingName, value);
     }
 
-    private SettingEnum putSetting(String key, String settingName, String value) {
+    protected SettingEnum putSetting(String key, String settingName, String value) {
         if (!defaultSettings.containsKey(settingName)) {
             return SettingEnum.DOESNOTEXIST;
         } else {
             customSettings.get(settingName).put(key, value);
-            writeJSON();
+            writeJSON(settingName, key, value);
             return SettingEnum.SUCCESSFUL;
         }
     }
@@ -131,7 +131,7 @@ public abstract class SettingsAbstract {
             Map<String, String> setting = customSettings.get(settingName);
             if (setting.containsKey(key)) {
                 customSettings.get(settingName).remove(key);
-                writeJSON();
+                writeJSON(settingName, key, null);
                 return SettingEnum.SUCCESSFUL;
             } else {
                 return SettingEnum.NOTSET;

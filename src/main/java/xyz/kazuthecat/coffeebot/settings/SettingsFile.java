@@ -45,7 +45,7 @@ public class SettingsFile extends SettingsAbstract {
     }
 
     @Override
-    void writeJSON() {
+    void writeJSON(String settingName, String id, String value) {
         // Pretty print json, for debugging
         System.out.println(new GsonBuilder().setPrettyPrinting().create().toJson(customSettings));
 

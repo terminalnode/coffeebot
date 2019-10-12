@@ -8,6 +8,7 @@ import xyz.kazuthecat.coffeebot.databases.DBHandler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class CoffeeLog extends Command {
     private final DBHandler dbHandler;
@@ -52,7 +53,7 @@ public class CoffeeLog extends Command {
         String reply;
         switch (arglist[0]) {
             case "add":   reply = addCups(arglist, uid); break;
-            case "check": reply = checkCups(arglist, uid); break;
+            case "check": reply = checkCups(uid); break;
             default:
                 reply = "That's not a valid subcommand.";
                 break;
@@ -73,7 +74,9 @@ public class CoffeeLog extends Command {
                 cupOverflow = true;
             }
         }
-        DBEnum result = dbHandler.execute("UPDATE coffeelog SET cups = cups + ? WHERE id = ?;", new String[][]{{numCups, uid}});
+        DBEnum result = dbHandler.execute(
+                "UPDATE coffeelog SET cups = cups + ? WHERE id = ?;",
+                new String[][]{{numCups, uid}});
 
         switch (result) {
             case SUCCESS:
@@ -95,8 +98,15 @@ public class CoffeeLog extends Command {
         return reply;
     }
 
-    private String checkCups(String[] arglist, String uid) {
-        // TODO
-        return "";
+    private String checkCups(String uid) {
+        String reply;
+        List<Map<String, String>> resultSet = dbHandler.query("SELECT * FROM coffeelog WHERE id = ?", new String[]{uid});
+        if (resultSet != null && resultSet.size() != 0) {
+            String numCups = resultSet.get(0).get("cups");
+            reply = String.format("You've had %s cups of coffee to date! :coffee:", numCups);
+        } else {
+            reply = "Something went wrong when trying to retrieve the number of cups. :shrug:";
+        }
+        return reply;
     }
 }

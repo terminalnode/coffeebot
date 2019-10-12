@@ -7,7 +7,7 @@ De ultimata målen för projektarbetet är:
 1. ~~Att ha en bot som kan utföra vissa funktioner när den triggas antingen av en viss händelse eller innehåll i ett meddelande eller med ett kommando.~~
 2. ~~Att vissa inställningar för boten ska sparas lokalt i JSON-format.~~
 3. ~~Att vissa av inställningarna för boten ska vara serverspecifika.~~
-4. Att skapa en funktion där användare kan logga sina kaffedrickarvanor i en databas (rimligtvis en serverless SQL-databas som sqlite).
+4. ~~Att skapa en funktion där användare kan logga sina kaffedrickarvanor i en databas (rimligtvis en serverless SQL-databas som sqlite).~~
 
 Utöver detta finns två bonusmål, som jag hoppas uppnå men som kanske inte är rimligt inom projektets tidsramar:
 1. Att exportera boten till ett .jar-format så att den kan startas utanför IntelliJ och till exempel lämnas ensam på en server.
@@ -37,7 +37,7 @@ Detta mål är uppnått när:
 
 **Status:** Ej implementerat
 
-## Delmål 10: Användare ska kunna kolla hur många kaffekoppar de har druckit
+## ~~Delmål 10: Användare ska kunna kolla hur många kaffekoppar de har druckit~~
 DBHandler kan just nu bara utföra uppgifter som inte ger någon returdata, den har inget stöd för queries. För att implementera och enkelt testa detta utökas funktionaliteten i `?coffeelog` med ett subcommando för att se antalet koppar kaffe man registrerat.
 
 När detta mål är uppnått är mål #4 för projektet uppnått.
@@ -45,7 +45,9 @@ När detta mål är uppnått är mål #4 för projektet uppnått.
 Detta mål är uppnått när:
 * `?coffeelog check` ger användare information om hur många koppar kaffe de druckit hittills.
 
-**Status:** Ej implementerat
+**Status:** Klart 2019-10-12
+
+`?coffeelog check` fungerar nu som beskrivet ovan!
 
 ## ~~Delmål 8 och 9: Registrera antalet druckna kopppar kaffe i en databas~~
 Delmål 8 och 9 flöt ihop eftersom databasstrukturen började arbetas på före `?coffeelog`, respektive delmåls mission statements återfinns nedan.

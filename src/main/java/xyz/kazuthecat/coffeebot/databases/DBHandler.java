@@ -92,28 +92,12 @@ public class DBHandler {
         Connection conn = null;
         Statement stmt = null;
         ResultSet rset = null;
-        List<Map<String, String>> result = new ArrayList<>();
-
+        List<Map<String, String>> result = null;
         try {
             conn = getDBConnection();
             stmt = conn.createStatement();
             rset = stmt.executeQuery(sql);
-
-            // Parsing the results into a list of HashMap<String, String>
-            ResultSetMetaData rsetMeta = rset.getMetaData();
-            String[] columns = new String[rsetMeta.getColumnCount()];
-
-            for (int i = 0; i < columns.length; i++) {
-                columns[i] = rsetMeta.getColumnLabel(i + 1);
-            }
-
-            while (rset.next()) {
-                Map<String, String> nextResult = new HashMap<>();
-                for (String column : columns) {
-                    nextResult.put(column, rset.getString(column));
-                }
-                result.add(nextResult);
-            }
+            result = parseResultSet(rset);
 
         } catch (SQLException | ClassNotFoundException e) {
             executeException(e);
@@ -121,6 +105,53 @@ public class DBHandler {
             try { if (stmt != null) stmt.close(); } catch (Exception e) { executeException(e); }
             try { if (conn != null) conn.close(); } catch (Exception e) { executeException(e); }
             try { if (rset != null) rset.close(); } catch (Exception e) { executeException(e); }
+        }
+        return result;
+    }
+
+    public List<Map<String, String>> query(String sql, String[] keys) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rset = null;
+        List<Map<String, String>> result = null;
+        try {
+            conn = getDBConnection();
+            stmt = conn.prepareStatement(sql);
+            for (int i = 0; i < keys.length; i++) {
+                // SQL-datatype doesn't seem to matter, works for int as well
+                stmt.setString(i + 1, keys[i]);
+            }
+            rset = stmt.executeQuery();
+            result = parseResultSet(rset);
+
+        } catch (SQLException | ClassNotFoundException e) {
+            executeException(e);
+        } finally {
+            try { if (stmt != null) stmt.close(); } catch (Exception e) { executeException(e); }
+            try { if (conn != null) conn.close(); } catch (Exception e) { executeException(e); }
+            try { if (rset != null) rset.close(); } catch (Exception e) { executeException(e); }
+        }
+        return result;
+    }
+
+    /**
+     * Helper function for the query methods. Parses a ResultSet into a list of Maps.
+     * @param rset The ResultSet that's being parsed.
+     * @return A List of Map. The keys are the columns in the result and the values the values.
+     * @throws SQLException The function doesn't handle any exceptions by itself.
+     */
+    private List<Map<String, String>> parseResultSet(ResultSet rset) throws SQLException {
+        List<Map<String, String>> result = new ArrayList<>();
+        ResultSetMetaData rsetMeta = rset.getMetaData();
+        String[] columns = new String[rsetMeta.getColumnCount()];
+        for (int i = 0; i < columns.length; i++) { columns[i] = rsetMeta.getColumnLabel(i + 1); }
+
+        while (rset.next()) {
+            Map<String, String> nextResult = new HashMap<>();
+            for (String column : columns) {
+                nextResult.put(column, rset.getString(column));
+            }
+            result.add(nextResult);
         }
         return result;
     }

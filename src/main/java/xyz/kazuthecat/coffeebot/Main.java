@@ -1,6 +1,5 @@
 package xyz.kazuthecat.coffeebot;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import xyz.kazuthecat.coffeebot.databases.DBHandler;
 import xyz.kazuthecat.coffeebot.settings.SettingsDB;
 import xyz.kazuthecat.coffeebot.listeners.*;
 import xyz.kazuthecat.coffeebot.commands.*;

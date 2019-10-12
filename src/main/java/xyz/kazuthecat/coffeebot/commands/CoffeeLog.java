@@ -29,13 +29,9 @@ public class CoffeeLog extends Command {
                 "id      BIGINT NOT NULL, " +
                 "name    VARCHAR(30) NOT NULL, " +
                 "cups    INT NOT NULL, " +
-                "PRIMARY KEY (id, name) )";
+                "PRIMARY KEY (id, name) );";
 
-        try {
-            dbHandler.execute(new String[]{coffeelog_tbl, coffeetypes_tbl});
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        dbHandler.execute(new String[]{coffeelog_tbl, coffeetypes_tbl});
     }
 
     @Override
@@ -46,7 +42,7 @@ public class CoffeeLog extends Command {
         String uid = user.getId();
         if (!initalizedUsers.contains(user)) {
             dbHandler.execute(
-                    "INSERT IGNORE INTO coffeelog (id,cups) VALUES (?, 0); ",
+                    "INSERT IGNORE INTO coffeelog (id,cups) VALUES (?, 0);",
                     new String[][]{{uid}}
                     );
             initalizedUsers.add(user);

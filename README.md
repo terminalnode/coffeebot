@@ -2,7 +2,15 @@
 It's written in Java and it's a bot, so Coffee Bot is what we're going with.
 
 ## Functionality
-Very little. Hoping to expand to "not a lot" in the near future.
+Some novelty functions developed in order to test functionality, nothing particularily useful. In its current form it mostly serves as a canvas for more elaborate projects.
 
-## Installation
-You will need to create a file called `config` in the project root. On the first line of this document put your bot's token, on the second line put your own Discord ID. Note that your Discord ID is not the same as your username, the ID is a long string of numbers and nothing else. You can get this by toggling developer mode, right-clicking your name and copy ID. A more hacky way to get it is to mention yourself in Discord and add a backslash before the mention, which should send a message that says `<@!YOURID>` (feel free to use this on all of your friends as well).
+### Persistent user/guild/owner settings
+Any class can be handed an instance of the Settings-class to add and retrieve it's own settings, with a few possibilities to add wild cards such as `{user}` or `{botname}` for the bot and user names respectively. Settings are stored and retrieved from memory through methods defined in SettingsAbstract, however the subclasses SettingsDB and SettingsFile will also make persistent saves of settings that are loaded when the bot starts up. SettingsDB accomplishes this by saving settings to a MySQL database and SettingsFile by writing them to file in JSON format.
+
+### Easy to use MySQL support
+The class DBHandler can connect to a MySQL database, execute statements and queries, and return the result of queries as a HashMap list. For example usage look at settings/SettingsDB and commands/Coffeelog.
+
+## Usage
+The main method of the Main class which initalizes the bot reads certain settings from a file called `config` in project root, for more information on what this file should contain consult the source code of this file.
+
+Using a MySQL database is not required for most functions, but it is required for SettingsDB and coffeelog.

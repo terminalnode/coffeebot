@@ -10,6 +10,10 @@ public class SettingsDB extends SettingsAbstract {
     private final DBHandler dbHandler;
     private boolean dbFunctional;
 
+    /**
+     * The main constructor for the class.
+     * @param dbHandler A DBHandler object that can read and write to a database.
+     */
     public SettingsDB(DBHandler dbHandler) {
         this.dbHandler = dbHandler;
 
@@ -35,21 +39,28 @@ public class SettingsDB extends SettingsAbstract {
                 String owner = setting.get("id");
                 String value = setting.get("value");
 
-                if (!customSettings.containsKey("name")) {
-                    customSettings.put(name, new HashMap<>());
-                    System.out.println(customSettings.size());
-                }
+                if (!customSettings.containsKey("name")) { customSettings.put(name, new HashMap<>()); }
                 Map<String, String> customSetting = customSettings.get(name);
                 customSetting.put(owner, value);
             }
         }
     }
 
+    /**
+     * For legacy reasons this method is called writeJSON, however it actually writes the entries to
+     * the database using the DBHandler object provided during initialization.
+     * @param settingName The name of the setting that's being updated.
+     * @param id The ID of the guild/user for whom the setting is being updated (or "DEFAULT" for owner settings).
+     * @param value The value being assigned to the setting.
+     */
     @Override
     void writeJSON(String settingName, String id, String value) {
+        // Value is null if a setting has been deleted.
         if (value != null) {
-            // Create entry if not exists
-            // Update entry
+            String sql =
+                    "INSERT INTO settingdb (id, name, value) VALUES (?, ?, ?) " +
+                    "ON DUPLICATE KEY UPDATE value = ?;";
+            dbHandler.execute(sql, new String[][]{{id, settingName, value, value}});
         } else {
             String sql = "DELETE FROM settingdb WHERE id = ? AND name = ?;";
             dbHandler.execute(sql, new String[][]{{id, settingName}});

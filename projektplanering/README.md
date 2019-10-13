@@ -21,13 +21,15 @@ Vissa av kraven på projektarbetet upptäcktes rätt sent och har därför inte 
 # Delmål
 Mål 1 och 2 är skrivna i retrospekt då de redan var avklarade när planeringen påbörjades, de syftar till att beskriva mitt tillvägagångssätt när jag påbörjade projektet. Listan är i nedåtgående ordning med de äldsta målen längst ner.
 
-## Delmål 12: Botens inställningar ska också kunna sparas i databasen
+## ~~Delmål 12: Botens inställningar ska också kunna sparas i databasen~~
 SettingsDB fungerar inte än, den måste kunna spara inställningarna i databasen genom writeJSON() funktionen.
 
 Detta mål är uppnått när:
 * Nya inställningar registreras korrekt i databasen.
 
-**Status:** Ej implementerat
+**Status:** Implementerat 2019-10-13
+
+Inställningar kan nu läggas in i databasen (via `?set` osv) samt uppdateras om de redan existerar i databasen.
 
 ## ~~Delmål 11: De inställningar som boten sparat i databasen ska även kunna läsas av boten~~
 (Tidigare delmål 12 men gjordes i omvänd ordning)

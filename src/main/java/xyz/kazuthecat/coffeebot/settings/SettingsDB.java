@@ -47,11 +47,16 @@ public class SettingsDB extends SettingsAbstract {
     }
 
     /**
-     * For legacy reasons this method is called writeJSON, however it actually writes the entries to
-     * the database using the DBHandler object provided during initialization.
-     * @param settingName The name of the setting that's being updated.
-     * @param id The ID of the guild/user for whom the setting is being updated (or "DEFAULT" for owner settings).
-     * @param value The value being assigned to the setting.
+     * This version of Settings will write the changes to a database and only updates the relevant setting, it is
+     * thus much more efficient than SettingsFile. The downside to this is that it does require a MySQL server to
+     * run. Another potential downside is latency if the MySQL server is located off site.
+     *
+     * Furthermore, failure to write to the database is not reported to the end user and will never be corrected by
+     * the bot. This shouldn't happen if the MySQL server is set up properly, however if at any point it becomes
+     * unreachable the changes to the settings will be reverted once the bot is restarted.
+     * @param settingName The name of the setting that's affected.
+     * @param id The ID of the user or guild whose settings are being changed (or DEFAULT for owner settings).
+     * @param value The new value for the setting.
      */
     @Override
     void writeJSON(String settingName, String id, String value) {

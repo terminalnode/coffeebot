@@ -1,6 +1,6 @@
 package xyz.kazuthecat.coffeebot.settings;
 
-import com.google.gson.GsonBuilder;
+// import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.FileOutputStream;
@@ -13,19 +13,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This class keeps track of all the individual settings, any changes to
- * the settings goes through this class which will also check if they exist
- * and carry out a few standard replacements for placeholders such as
- * {placeholder_name} and the like.
+ * A subclass to SettingsAbstract that saves all settings to disk in JSON format.
+ * The benefit of this is that no additional setup is required, the downside is that all settings
+ * are written to disk every time a setting is change. For many settings this can result in a lot
+ * of disk I/O.
  */
 public class SettingsFile extends SettingsAbstract {
     private final String settingsFile;
 
     /**
-     * The constructor for the settings class. When called it will look for
-     * any existing settings and load them. If the settings can't load for any
-     * reason (such as if they don't exist) it will output a message saying
-     * something went wrong and then create a new set of settings.
+     * The main constructor for the settings class.
      */
     public SettingsFile() {
         settingsFile = "botsettings.json";
@@ -44,10 +41,18 @@ public class SettingsFile extends SettingsAbstract {
         }
     }
 
+    /**
+     * This version of Settings will dump all settings into a file in JSON format, allowing for a simple solution with
+     * zero configuration. The downside to this is that it might lead to a lot of disk I/O, slowing down the bot's
+     * performance and potentially wearing out the disk.
+     * @param settingName The name of the setting that's affected.
+     * @param id The ID of the user or guild whose settings are being changed (or DEFAULT for owner settings).
+     * @param value The new value for the setting.
+     */
     @Override
     void writeJSON(String settingName, String id, String value) {
         // Pretty print json, for debugging
-        System.out.println(new GsonBuilder().setPrettyPrinting().create().toJson(customSettings));
+        // System.out.println(new GsonBuilder().setPrettyPrinting().create().toJson(customSettings));
 
         String json = gson.toJson(customSettings);
         try {

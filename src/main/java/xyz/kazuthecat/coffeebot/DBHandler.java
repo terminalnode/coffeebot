@@ -6,11 +6,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This class handles all of the bots database functions and requires a working MySQL server.
+ */
 public class DBHandler {
     private final String dbAddr;
 
     /**
-     * Default constructor for the DBHandler.
+     * Default constructor.
      * @param dbAddr The address to the database, can be an IP or host name.
      * @param dbUser The username with which we'll login to the database.
      * @param dbPass The password with which we'll login to the database.
